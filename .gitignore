@@ -27,6 +27,9 @@ env/
 .env.*
 !.env.example
 
+# ── Claude Code (lokalna konfiguracija) ──────────
+.claude/
+
 # ── Editor / OS ──────────────────────────────────
 .vscode/*
 !.vscode/extensions.json
