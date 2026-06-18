@@ -30,6 +30,9 @@ env/
 # ── Claude Code (lokalna konfiguracija) ──────────
 .claude/
 
+# ── Lokalni backup fajlovi ───────────────────────
+.backups/
+
 # ── Editor / OS ──────────────────────────────────
 .vscode/*
 !.vscode/extensions.json

@@ -5,6 +5,10 @@ interface Diamond {
   y: number
   originX: number
   originY: number
+  // Intro: launch tacka van ekrana + stagger; oblik dolijece odavde na origin
+  startX: number
+  startY: number
+  introDelay: number
   sizeX: number
   sizeY: number
   opacity: number
@@ -37,6 +41,8 @@ function createDiamonds(width: number, height: number): Diamond[] {
   const ROWS = 4
   const cellW = width  / COLS
   const cellH = height / ROWS
+  const cx = width  / 2
+  const cy = height / 2
 
   return Array.from({ length: DIAMOND_COUNT }, (_, i) => {
     const col = i % COLS
@@ -44,10 +50,20 @@ function createDiamonds(width: number, height: number): Diamond[] {
     // 0.1–0.9 unutar celije: oblik nece sletjeti previse blizu ruba celije
     const x = (col + 0.1 + Math.random() * 0.8) * cellW
     const y = (row + 0.1 + Math.random() * 0.8) * cellH
+
+    // Launch tacka: radijalno od centra ka obliku, gurnuta daleko van ekrana
+    const dirX = x - cx
+    const dirY = y - cy
+    const len  = Math.hypot(dirX, dirY) || 1
+    const launch = 600 + Math.random() * 500   // 600–1100px van pozicije
     return {
       x, y,
       originX: x,
       originY: y,
+      startX: x + (dirX / len) * launch,
+      startY: y + (dirY / len) * launch,
+      introDelay: i * 0.045,                    // stagger: oblici ulijecu jedan za drugim
+
       sizeX: 28 + Math.random() * 44,
       sizeY: 14 + Math.random() * 26,
       opacity: 0.22 + Math.random() * 0.38,
@@ -193,6 +209,7 @@ const DiamondCanvas = forwardRef<DiamondCanvasHandle>((_, ref) => {
     const REPULSION_FORCE  = 7.5
     const SPRING           = 0.012  // nizak spring = sporo, lirsiko vracanje na mjesto
     const DAMPING          = 0.88
+    const INTRO_DUR        = 1.3    // sekundi po obliku za ulijetanje
 
     const loop = () => {
       const time = (Date.now() - startTimeRef.current) / 1000
@@ -203,6 +220,25 @@ const DiamondCanvas = forwardRef<DiamondCanvasHandle>((_, ref) => {
         // sa razlicitim fazama i brzinama → organsko, nasumicno plutanje
         const driftX = Math.sin(time * d.driftSpeedX + d.driftPhaseX) * d.driftAmpX
         const driftY = Math.sin(time * d.driftSpeedY + d.driftPhaseY) * d.driftAmpY
+
+        // ── Intro: oblik dolijece sa launch tacke van ekrana na svoju poziciju ──
+        const lp = Math.min(Math.max((time - d.introDelay) / INTRO_DUR, 0), 1)
+        if (lp < 1) {
+          const eased = 1 - Math.pow(1 - lp, 3)   // easeOutCubic
+          // Cilj je origin + trenutni drift → na kraju intra nema skoka u fiziku
+          const tX = d.originX + driftX
+          const tY = d.originY + driftY
+          d.x = d.startX + (tX - d.startX) * eased
+          d.y = d.startY + (tY - d.startY) * eased
+          d.rotation += 0.02                       // lagano vrti dok leti
+          drawShape(
+            ctx, d.x, d.y,
+            d.sizeX, d.sizeY,
+            d.rotation, d.opacity * eased,         // fade-in
+            time, d.shimmerPhase, d.shimmerSpeed,
+          )
+          continue
+        }
 
         const dx   = d.x - mouseRef.current.x
         const dy   = d.y - mouseRef.current.y

@@ -7,7 +7,6 @@ const SUBTITLE_WORDS = "Describe your situation and get wise, dignified advice t
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null)
-  const glowRef    = useRef<HTMLDivElement>(null)
   const tiltRef    = useRef<HTMLDivElement>(null)
   const canvasRef  = useRef<DiamondCanvasHandle>(null)
 
@@ -28,11 +27,6 @@ export default function Hero() {
       const rect = section.getBoundingClientRect()
       const x = e.clientX - rect.left
       const y = e.clientY - rect.top
-
-      // Cursor glow prati mis
-      if (glowRef.current) {
-        glowRef.current.style.transform = `translate(${x}px, ${y}px)`
-      }
 
       // H1 3D tilt: max 3.5° rotateY, max 2° rotateX
       if (tiltRef.current) {
@@ -77,25 +71,6 @@ export default function Hero() {
       }}
     >
       <DiamondCanvas ref={canvasRef} />
-
-      {/* Cursor glow — meka zelena aureola koja prati kursor */}
-      <div
-        ref={glowRef}
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '580px',
-          height: '580px',
-          marginLeft: '-290px',
-          marginTop: '-290px',
-          background: 'radial-gradient(circle, rgba(34,197,94,0.13) 0%, rgba(34,197,94,0.05) 40%, transparent 70%)',
-          pointerEvents: 'none',
-          transition: 'transform 0.14s ease-out',
-          willChange: 'transform',
-          zIndex: 2,
-        }}
-      />
 
       <div className="relative z-10 text-center max-w-3xl mx-auto px-6">
 

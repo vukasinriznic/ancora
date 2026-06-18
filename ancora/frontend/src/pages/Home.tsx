@@ -8,6 +8,7 @@ import MarqueeStrip from '../components/MarqueeStrip'
 import CtaSection from '../components/CtaSection'
 import Footer from '../components/Footer'
 import CursorTrail from '../components/CursorTrail'
+import CursorGlow from '../components/CursorGlow'
 
 export default function Home() {
   const footerWrapRef = useRef<HTMLDivElement>(null)
@@ -33,9 +34,10 @@ export default function Home() {
       </div>
 
       <main
-        className="overflow-x-hidden relative"
+        className="overflow-x-clip relative"
         style={{ zIndex: 1, paddingBottom: footerH }}
       >
+        <CursorGlow />
         <CursorTrail />
         <Navbar />
         <Hero />
