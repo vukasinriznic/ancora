@@ -37,7 +37,7 @@ export default function Navbar() {
       className="fixed top-0 left-0 right-0 z-50"
       style={{
         backgroundColor:      isDark
-          ? `rgba(13, 13, 13, ${0.55 + t * 0.3})`
+          ? `rgba(10, 42, 31, ${0.48 + t * 0.28})`
           : `rgba(255, 255, 255, ${t * 0.07})`,
         backdropFilter:       `blur(${t * 20}px) saturate(${100 + t * 60}%)`,
         WebkitBackdropFilter: `blur(${t * 20}px) saturate(${100 + t * 60}%)`,

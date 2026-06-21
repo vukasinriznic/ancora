@@ -1,4 +1,4 @@
-import { motion, AnimatePresence, useInView, useScroll, useTransform, useMotionValueEvent } from 'framer-motion'
+import { motion, AnimatePresence, useInView, useScroll, useSpring, useTransform, useMotionValueEvent } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import AnimatedWords from './AnimatedWords'
 
@@ -22,16 +22,17 @@ function ChatIcon() {
   )
 }
 function AnchorIcon() {
+  // Identično logo-u (AncoraSVGLogo): iste putanje, tanak ujednačen stroke, aspect 1:1.2
   return (
-    <svg width="24" height="24" viewBox="0 0 100 120" fill="none">
-      <circle cx="50" cy="11" r="8" stroke="currentColor" strokeWidth="3" />
-      <line x1="50" y1="19" x2="50" y2="92" stroke="currentColor" strokeWidth="3" />
-      <path d="M50,34 C66,43 66,78 50,87 C34,78 34,43 50,34Z" stroke="currentColor" strokeWidth="3" fill="none" />
-      <path d="M14,84 Q50,105 86,84" stroke="currentColor" strokeWidth="3" fill="none" strokeLinecap="round" />
-      <path d="M14,84 L7,75"  stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <path d="M14,84 L20,77" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <path d="M86,84 L93,75" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <path d="M86,84 L80,77" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+    <svg width="22" height="26" viewBox="0 0 100 120" fill="none">
+      <circle cx="50" cy="11" r="8" stroke="currentColor" strokeWidth="2.3" />
+      <line x1="50" y1="19" x2="50" y2="92" stroke="currentColor" strokeWidth="2.3" />
+      <path d="M50,34 C66,43 66,78 50,87 C34,78 34,43 50,34Z" stroke="currentColor" strokeWidth="2.3" fill="none" />
+      <path d="M14,84 Q50,105 86,84" stroke="currentColor" strokeWidth="2.3" fill="none" strokeLinecap="round" />
+      <path d="M14,84 L7,75"  stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
+      <path d="M14,84 L20,77" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
+      <path d="M86,84 L93,75" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
+      <path d="M86,84 L80,77" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
     </svg>
   )
 }
@@ -97,7 +98,10 @@ export default function HowItWorks() {
     offset: ['start 65%', 'end 80%'],
   })
 
-  // Koji je korak "dostignut" sidrom — pali se kako lanac napreduje
+  // Smooth sidro — spring dodaje inerciju da klizanje bude tečno
+  const smoothProg = useSpring(lineProg, { stiffness: 130, damping: 26, mass: 0.6 })
+
+  // Koji je korak "dostignut" sidrom — pali se kako lanac napreduje (raw, bez kašnjenja)
   const [activeStep, setActiveStep] = useState(-1)
   useMotionValueEvent(lineProg, 'change', (v) => {
     let idx = -1
@@ -130,7 +134,7 @@ export default function HowItWorks() {
 
         {/* Koraci — zigzag; connecting linija vijuga kroz gutter i crta se na scroll */}
         <div ref={stepsRef} className="relative flex flex-col gap-16 md:gap-10">
-          <JourneyLine w={dim.w} h={dim.h} progress={lineProg} />
+          <JourneyLine w={dim.w} h={dim.h} progress={smoothProg} />
           {steps.map((step, i) => (
             <StepRow key={step.number} step={step} index={i} lit={i <= activeStep} />
           ))}
