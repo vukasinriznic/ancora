@@ -1,13 +1,15 @@
-import { useEffect, useRef, useState } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import Navbar from '../components/Navbar'
 import Hero from '../components/Hero'
-import HowItWorks from '../components/HowItWorks'
-import Features from '../components/Features'
-import About from '../components/About'
-import CtaSection from '../components/CtaSection'
-import Footer from '../components/Footer'
 import CursorTrail from '../components/CursorTrail'
 import CursorGlow from '../components/CursorGlow'
+
+// Sekcije ispod prevoja — lazy-loaded, parse-uju se tek kad browser stigni do njih
+const HowItWorks = lazy(() => import('../components/HowItWorks'))
+const Features   = lazy(() => import('../components/Features'))
+const About      = lazy(() => import('../components/About'))
+const CtaSection = lazy(() => import('../components/CtaSection'))
+const Footer     = lazy(() => import('../components/Footer'))
 
 export default function Home() {
   const footerWrapRef = useRef<HTMLDivElement>(null)
@@ -40,10 +42,12 @@ export default function Home() {
         <CursorTrail />
         <Navbar />
         <Hero />
-        <HowItWorks />
-        <Features />
-        <About />
-        <CtaSection />
+        <Suspense fallback={null}>
+          <HowItWorks />
+          <Features />
+          <About />
+          <CtaSection />
+        </Suspense>
       </main>
     </>
   )
