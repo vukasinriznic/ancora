@@ -31,20 +31,19 @@ export interface DiamondCanvasHandle {
   triggerExplosion: (cx: number, cy: number) => void
 }
 
-const DIAMOND_COUNT = 16
-
-function createDiamonds(width: number, height: number): Diamond[] {
-  // Stratified sampling: 4x4 grid, jedan oblik po celiji sa random offsetom.
+function createDiamonds(width: number, height: number, cols: number, rows: number): Diamond[] {
+  // Stratified sampling: cols×rows grid, jedan oblik po celiji sa random offsetom.
   // Ovo garantuje ravnomjernu pokrivenost cijele hero sekcije bez nasumicnog
   // grupiranja koje bi Math.random() sam po sebi mogao da napravi.
-  const COLS = 4
-  const ROWS = 4
+  const COLS = cols
+  const ROWS = rows
+  const count = cols * rows
   const cellW = width  / COLS
   const cellH = height / ROWS
   const cx = width  / 2
   const cy = height / 2
 
-  return Array.from({ length: DIAMOND_COUNT }, (_, i) => {
+  return Array.from({ length: count }, (_, i) => {
     const col = i % COLS
     const row = Math.floor(i / COLS)
     // 0.1–0.9 unutar celije: oblik nece sletjeti previse blizu ruba celije
@@ -194,7 +193,9 @@ const DiamondCanvas = forwardRef<DiamondCanvasHandle>((_, ref) => {
       canvas.height = canvas.offsetHeight
       // Kristali se pojavljuju samo u gornjoj 2/3 (hero area).
       // Donja 1/3 je prostor u koji oblici mogu da ulete tokom eksplozije.
-      diamondsRef.current = createDiamonds(canvas.width, canvas.height * (2 / 3))
+      // Manje rombova na mobilnom (uže = manje kolona).
+      const cols = canvas.width < 640 ? 2 : 4
+      diamondsRef.current = createDiamonds(canvas.width, canvas.height * (2 / 3), cols, 3)
     }
     resize()
     window.addEventListener('resize', resize)

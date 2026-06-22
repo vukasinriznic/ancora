@@ -60,7 +60,7 @@ export default function Navbar() {
         <div className="flex items-center gap-3 cursor-pointer select-none">
           <AncoraSVGLogo size={40} color="#1FD65F" />
           <span
-            className="text-xl font-semibold tracking-tight transition-colors duration-300"
+            className="text-lg sm:text-xl font-semibold tracking-tight transition-colors duration-300"
             style={{ fontFamily: 'Playfair Display, serif', color: isDark ? '#FFFFFF' : '#1A1A1A', letterSpacing: '0.02em' }}
           >
             Ancora
@@ -100,7 +100,7 @@ export default function Navbar() {
             {tr('nav.login')}
           </button>
 
-          <DiamondButton className="px-6 py-2.5 text-sm">{tr('nav.getStarted')}</DiamondButton>
+          <DiamondButton className="px-4 py-2 text-xs sm:px-6 sm:py-2.5 sm:text-sm">{tr('nav.getStarted')}</DiamondButton>
         </div>
 
       </div>
