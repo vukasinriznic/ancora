@@ -1,11 +1,13 @@
 import { useRef, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import DiamondCanvas, { type DiamondCanvasHandle } from './DiamondCanvas'
 import DiamondButton from './DiamondButton'
 
-const SUBTITLE_WORDS = "Describe your situation and get wise, dignified advice that helps you navigate relationships with honesty and compassion.".split(' ')
-
 export default function Hero() {
+  const { t } = useTranslation()
+  const subtitleWords = t('hero.subtitle').split(' ')
+
   const sectionRef = useRef<HTMLElement>(null)
   const tiltRef    = useRef<HTMLDivElement>(null)
   const canvasRef  = useRef<DiamondCanvasHandle>(null)
@@ -63,9 +65,9 @@ export default function Hero() {
       className="relative min-h-screen flex items-center justify-center pt-20 z-10"
       style={{
         background: `
-          radial-gradient(ellipse 60% 60% at 15% 50%, rgba(34,197,94,0.07) 0%, transparent 70%),
-          radial-gradient(ellipse 50% 50% at 85% 40%, rgba(34,197,94,0.06) 0%, transparent 70%),
-          radial-gradient(ellipse 40% 40% at 60% 80%, rgba(34,197,94,0.04) 0%, transparent 70%),
+          radial-gradient(ellipse 60% 60% at 15% 50%, rgba(31, 214, 95,0.07) 0%, transparent 70%),
+          radial-gradient(ellipse 50% 50% at 85% 40%, rgba(31, 214, 95,0.06) 0%, transparent 70%),
+          radial-gradient(ellipse 40% 40% at 60% 80%, rgba(31, 214, 95,0.04) 0%, transparent 70%),
           #ffffff
         `,
       }}
@@ -76,17 +78,17 @@ export default function Hero() {
 
         {/* H1 u wrapperu koji prima 3D tilt od misa */}
         <div ref={tiltRef} style={{ willChange: 'transform' }}>
-          <motion.h1
+          <m.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
             className="text-5xl md:text-6xl lg:text-7xl font-semibold leading-tight mb-6"
             style={{ fontFamily: 'Playfair Display, serif', color: '#1A1A1A' }}
           >
-            Clarity in every
+            {t('hero.titleLine1')}
             <br />
-            <span className="connection-shimmer">connection</span>
-          </motion.h1>
+            <span className="connection-shimmer">{t('hero.titleWord')}</span>
+          </m.h1>
         </div>
 
         {/* Podnaslov — rijec po rijec typing animacija */}
@@ -94,8 +96,8 @@ export default function Hero() {
           className="text-lg md:text-xl leading-relaxed mb-10 max-w-xl mx-auto"
           style={{ color: '#6B7280' }}
         >
-          {SUBTITLE_WORDS.map((word, i) => (
-            <motion.span
+          {subtitleWords.map((word, i) => (
+            <m.span
               key={i}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -103,20 +105,20 @@ export default function Hero() {
               style={{ display: 'inline-block', marginRight: '0.28em' }}
             >
               {word}
-            </motion.span>
+            </m.span>
           ))}
         </p>
 
         {/* Dugmici */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 1.4 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
         >
-          <DiamondButton variant="primary" className="px-9 py-4 text-base">Start for free</DiamondButton>
-          <DiamondButton variant="secondary" className="px-9 py-4 text-base">Learn more</DiamondButton>
-        </motion.div>
+          <DiamondButton variant="primary" className="px-9 py-4 text-base">{t('hero.startFree')}</DiamondButton>
+          <DiamondButton variant="secondary" className="px-9 py-4 text-base">{t('hero.learnMore')}</DiamondButton>
+        </m.div>
       </div>
 
     </section>

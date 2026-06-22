@@ -12,18 +12,18 @@ function AnchorIcon() {
   return (
     <svg viewBox="0 0 100 120" fill="none" width="20" height="24" aria-hidden="true">
       {/* Ring na vrhu */}
-      <circle cx="50" cy="11" r="8" stroke="currentColor" strokeWidth="2.6" />
+      <circle cx="50" cy="11" r="7" stroke="currentColor" strokeWidth="2.6" />
       {/* Shaft */}
-      <line x1="50" y1="19" x2="50" y2="92" stroke="currentColor" strokeWidth="2.6" />
+      <line x1="50" y1="18" x2="50" y2="88" stroke="currentColor" strokeWidth="2.6" />
       {/* Telo sidra — suza */}
-      <path d="M50,34 C66,43 66,78 50,87 C34,78 34,43 50,34Z" stroke="currentColor" strokeWidth="2.6" fill="none" />
+      <path d="M31,29 L69,29" stroke="currentColor" strokeWidth="2.6" fill="none" />
       {/* Donja krivina (flukes) */}
-      <path d="M14,84 Q50,105 86,84" stroke="currentColor" strokeWidth="2.6" fill="none" strokeLinecap="round" />
+      <path d="M22,66 C27,84 39,89 50,89 C61,89 73,84 78,66" stroke="currentColor" strokeWidth="2.6" fill="none" strokeLinecap="round" />
       {/* Strelice */}
-      <path d="M14,84 L7,75"  stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" />
-      <path d="M14,84 L20,77" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" />
-      <path d="M86,84 L93,75" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" />
-      <path d="M86,84 L80,77" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" />
+      <path d="M22,66 L15,61"  stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" />
+      <path d="M22,66 L27,57" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" />
+      <path d="M78,66 L85,61" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" />
+      <path d="M78,66 L73,57" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" />
     </svg>
   )
 }

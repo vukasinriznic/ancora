@@ -3,9 +3,9 @@
 @source "../index.html";
 
 :root {
-  --color-emerald: #22C55E;
-  --color-emerald-light: #4ADE80;
-  --color-emerald-dark: #16A34A;
+  --color-emerald: #1FD65F;
+  --color-emerald-light: #54E98A;
+  --color-emerald-dark: #14B854;
 }
 
 * {
@@ -36,7 +36,7 @@ h1, h2, h3 {
   Rjesenje — background-size: 300%:
   Vidljivi prozor = 1/3 gradijenta. Bijeli odraz (50% u gradijentu)
   je uvijek u SREDNOJ trecini. Start (0%) i hold (100%) pokazuju
-  krajnje trecine koje su solid #22C55E — bug nestaje.
+  krajnje trecine koje su solid #1FD65F — bug nestaje.
 */
 /* ── Diamond fill button ─────────────────────────────────────────── */
 .diamond-fill {
@@ -53,8 +53,8 @@ h1, h2, h3 {
 
 /* Primary: zelena bg + bijeli romboid → tekst postaje zelen */
 .btn-diamond-primary {
-  background-color: #22C55E;
-  border: 1px solid #22C55E;
+  background-color: #1FD65F;
+  border: 1px solid #1FD65F;
   color: #ffffff;
 }
 .btn-diamond-primary .diamond-fill { background-color: #ffffff; }
@@ -64,15 +64,15 @@ h1, h2, h3 {
 .btn-diamond-primary .btn-diamond-text {
   transition: color 0.65s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.btn-diamond-primary:hover .btn-diamond-text { color: #22C55E; }
+.btn-diamond-primary:hover .btn-diamond-text { color: #1FD65F; }
 
 /* Secondary: outline + zeleni romboid → tekst postaje bijel */
 .btn-diamond-secondary {
   background-color: transparent;
-  border: 1px solid #22C55E;
-  color: #22C55E;
+  border: 1px solid #1FD65F;
+  color: #1FD65F;
 }
-.btn-diamond-secondary .diamond-fill { background-color: #22C55E; }
+.btn-diamond-secondary .diamond-fill { background-color: #1FD65F; }
 .btn-diamond-secondary:hover .diamond-fill {
   transform: translate(-50%, -50%) rotate(45deg) scale(1);
 }
@@ -95,7 +95,7 @@ h1, h2, h3 {
   background: conic-gradient(
     from var(--ba),
     transparent 0deg,
-    var(--bc, #22C55E) 60deg,
+    var(--bc, #1FD65F) 60deg,
     transparent 140deg,
     transparent 360deg
   );
@@ -114,30 +114,37 @@ h1, h2, h3 {
   .anim-border { animation: none; }
 }
 
+/*
+  Bešavni shine bez "secanja":
+  - donji sloj = statična two-tone baza (uvijek vidljiva)
+  - gornji sloj = bijeli odsjaj (300% širine); pri pos 0% i 100% je IZVAN
+    teksta s obje strane → na granici loop-a (0%↔100%) prikaz je identičan
+    (čista baza), pa nema skoka. Odsjaj prijeđe u prvih ~28% pa pauza.
+*/
 @keyframes connectionShimmer {
-  0%   { background-position:   0% center; }
-  15%  { background-position:  50% center; }
-  22%  { background-position: 100% center; }
-  100% { background-position: 100% center; }
+  0%   { background-position: 100% 0, 0 0; }
+  28%  { background-position:   0% 0, 0 0; }
+  100% { background-position:   0% 0, 0 0; }
 }
 
 .connection-shimmer {
-  background: linear-gradient(
-    90deg,
-    #22C55E 0%,
-    #22C55E 33%,
-    #86efac 40%,
-    #f0fdf4 46%,
-    #ffffff 50%,
-    #f0fdf4 54%,
-    #86efac 60%,
-    #22C55E 67%,
-    #22C55E 100%
-  );
-  background-size: 300% auto;
+  background:
+    linear-gradient(110deg,
+      transparent 40%,
+      rgba(134, 239, 172, 0.55) 47%,
+      rgba(255, 255, 255, 0.95) 50%,
+      rgba(134, 239, 172, 0.55) 53%,
+      transparent 60%),
+    linear-gradient(90deg, #15803D 0%, #1FD65F 50%, #15803D 100%);
+  background-size: 300% 100%, 100% 100%;
+  background-position: 100% 0, 0 0;
+  background-repeat: no-repeat;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
-  animation: connectionShimmer 14s linear infinite;
+  animation: connectionShimmer 6s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .connection-shimmer { animation: none; }
 }

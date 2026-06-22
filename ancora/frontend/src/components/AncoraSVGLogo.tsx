@@ -1,13 +1,13 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 
 interface Props {
   size?: number
   color?: string
 }
 
-export default function AncoraSVGLogo({ size = 36, color = '#22C55E' }: Props) {
+export default function AncoraSVGLogo({ size = 36, color = '#15803D' }: Props) {
   return (
-    <motion.svg
+    <m.svg
       viewBox="0 0 100 120"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -17,36 +17,21 @@ export default function AncoraSVGLogo({ size = 36, color = '#22C55E' }: Props) {
       whileHover={{ rotate: 15, y: -2 }}
       transition={{ type: 'spring', stiffness: 350, damping: 10 }}
     >
-      {/* Ring na vrhu */}
-      <circle cx="50" cy="11" r="8" stroke={color} strokeWidth="1.2" />
-
-      {/* Shaft — vertikalna linija */}
-      <line x1="50" y1="19" x2="50" y2="92" stroke={color} strokeWidth="1.2" />
-
-      {/* Lens / telo sidra — elegantna suza oblika */}
-      <path
-        d="M50,34 C66,43 66,78 50,87 C34,78 34,43 50,34Z"
-        stroke={color}
-        strokeWidth="1.2"
-        fill="none"
-      />
-
-      {/* Donja krivina (flukes) — graciozna */}
-      <path
-        d="M14,84 Q50,105 86,84"
-        stroke={color}
-        strokeWidth="1.2"
-        fill="none"
-        strokeLinecap="round"
-      />
-
-      {/* Leva strelica */}
-      <path d="M14,84 L7,75" stroke={color} strokeWidth="1.2" strokeLinecap="round" />
-      <path d="M14,84 L20,77" stroke={color} strokeWidth="1.2" strokeLinecap="round" />
-
-      {/* Desna strelica */}
-      <path d="M86,84 L93,75" stroke={color} strokeWidth="1.2" strokeLinecap="round" />
-      <path d="M86,84 L80,77" stroke={color} strokeWidth="1.2" strokeLinecap="round" />
-    </motion.svg>
+      <g stroke={color} strokeWidth="5.5" fill="none" strokeLinecap="round" strokeLinejoin="round">
+        {/* Ring (shackle) na vrhu */}
+        <circle cx="50" cy="11" r="7" />
+        {/* Shaft — vertikalna osa */}
+        <line x1="50" y1="18" x2="50" y2="88" />
+        {/* Stock — prečka */}
+        <line x1="31" y1="29" x2="69" y2="29" />
+        {/* Krakovi — izvijaju se nagore */}
+        <path d="M22,66 C27,84 39,89 50,89 C61,89 73,84 78,66" />
+        {/* Šiljci (flukes) na krajevima krakova */}
+        <path d="M22,66 L15,61" />
+        <path d="M22,66 L27,57" />
+        <path d="M78,66 L85,61" />
+        <path d="M78,66 L73,57" />
+      </g>
+    </m.svg>
   )
 }

@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 
 interface Props {
   children: string
@@ -24,7 +24,7 @@ export default function AnimatedWords({
   return (
     <Tag className={className} style={style}>
       {words.map((word, i) => (
-        <motion.span
+        <m.span
           key={i}
           initial={{ opacity: 0, y: 14 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -32,7 +32,7 @@ export default function AnimatedWords({
           style={{ display: 'inline-block', marginRight: '0.28em' }}
         >
           {word}
-        </motion.span>
+        </m.span>
       ))}
     </Tag>
   )

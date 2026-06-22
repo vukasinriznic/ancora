@@ -41,9 +41,9 @@ function drawMiniCrystal(
   ctx.closePath()
 
   const grad = ctx.createLinearGradient(0, -sy, 0, sy)
-  grad.addColorStop(0,    `rgba(74,  222, 128, ${opacity * 0.85})`)
-  grad.addColorStop(0.45, `rgba(34,  197, 94,  ${opacity})`)
-  grad.addColorStop(1,    `rgba(22,  163, 74,  ${opacity * 0.55})`)
+  grad.addColorStop(0,    `rgba(84, 233, 138, ${opacity * 0.85})`)
+  grad.addColorStop(0.45, `rgba(31, 214, 95,  ${opacity})`)
+  grad.addColorStop(1,    `rgba(20, 184, 84,  ${opacity * 0.55})`)
   ctx.fillStyle   = grad
   ctx.strokeStyle = `rgba(134, 239, 172, ${opacity * 0.7})`
   ctx.lineWidth   = 0.5

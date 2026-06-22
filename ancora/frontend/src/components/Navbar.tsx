@@ -1,9 +1,17 @@
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import AncoraSVGLogo from './AncoraSVGLogo'
 import DiamondButton from './DiamondButton'
 
 export default function Navbar() {
+  const { t: tr, i18n } = useTranslation()
+  const cur = i18n.language?.startsWith('sr') ? 'sr' : 'en'
+  const setLang = (lng: 'en' | 'sr') => {
+    i18n.changeLanguage(lng)
+    try { localStorage.setItem('lang', lng) } catch { /* ignore */ }
+  }
+
   const [t,      setT]      = useState(0)
   const [isDark, setIsDark] = useState(false)
 
@@ -30,7 +38,7 @@ export default function Navbar() {
   }, [])
 
   return (
-    <motion.nav
+    <m.nav
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: 'easeOut' }}
@@ -41,7 +49,7 @@ export default function Navbar() {
           : `rgba(255, 255, 255, ${t * 0.07})`,
         backdropFilter:       `blur(${t * 20}px) saturate(${100 + t * 60}%)`,
         WebkitBackdropFilter: `blur(${t * 20}px) saturate(${100 + t * 60}%)`,
-        borderBottom:  `1px solid rgba(34, 197, 94, ${isDark ? 0.15 : t * 0.12})`,
+        borderBottom:  `1px solid rgba(21, 128, 61, ${isDark ? 0.15 : t * 0.12})`,
         boxShadow:     `0 1px 32px rgba(0, 0, 0, ${isDark ? 0.3 : t * 0.05})`,
         transition:    'background-color 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease, backdrop-filter 0.3s ease, -webkit-backdrop-filter 0.3s ease',
       }}
@@ -50,7 +58,7 @@ export default function Navbar() {
 
         {/* ── Logo ── */}
         <div className="flex items-center gap-3 cursor-pointer select-none">
-          <AncoraSVGLogo size={40} />
+          <AncoraSVGLogo size={40} color="#1FD65F" />
           <span
             className="text-xl font-semibold tracking-tight transition-colors duration-300"
             style={{ fontFamily: 'Playfair Display, serif', color: isDark ? '#FFFFFF' : '#1A1A1A', letterSpacing: '0.02em' }}
@@ -62,23 +70,23 @@ export default function Navbar() {
         {/* ── Desna strana ── */}
         <div className="flex items-center gap-7">
 
-          {/* EN/SR switch */}
+          {/* EN/SR switch — aktivni jezik je istaknut */}
           <div
             className="flex items-center gap-1.5 text-sm font-medium transition-colors duration-300"
             style={{ color: isDark ? '#6B7280' : '#9CA3AF' }}
           >
             <button
+              onClick={() => setLang('en')}
+              aria-pressed={cur === 'en'}
               className="transition-colors duration-200 cursor-pointer"
-              style={{ color: 'inherit' }}
-              onMouseEnter={e => (e.currentTarget.style.color = isDark ? '#FFFFFF' : '#1A1A1A')}
-              onMouseLeave={e => (e.currentTarget.style.color = 'inherit')}
+              style={{ color: cur === 'en' ? (isDark ? '#FFFFFF' : '#1A1A1A') : 'inherit', fontWeight: cur === 'en' ? 600 : 500 }}
             >EN</button>
             <span>/</span>
             <button
+              onClick={() => setLang('sr')}
+              aria-pressed={cur === 'sr'}
               className="transition-colors duration-200 cursor-pointer"
-              style={{ color: 'inherit' }}
-              onMouseEnter={e => (e.currentTarget.style.color = isDark ? '#FFFFFF' : '#1A1A1A')}
-              onMouseLeave={e => (e.currentTarget.style.color = 'inherit')}
+              style={{ color: cur === 'sr' ? (isDark ? '#FFFFFF' : '#1A1A1A') : 'inherit', fontWeight: cur === 'sr' ? 600 : 500 }}
             >SR</button>
           </div>
 
@@ -89,13 +97,13 @@ export default function Navbar() {
             onMouseEnter={e => (e.currentTarget.style.color = isDark ? '#FFFFFF' : '#1A1A1A')}
             onMouseLeave={e => (e.currentTarget.style.color = isDark ? '#9CA3AF' : '#4B5563')}
           >
-            Log in
+            {tr('nav.login')}
           </button>
 
-          <DiamondButton className="px-6 py-2.5 text-sm">Get started</DiamondButton>
+          <DiamondButton className="px-6 py-2.5 text-sm">{tr('nav.getStarted')}</DiamondButton>
         </div>
 
       </div>
-    </motion.nav>
+    </m.nav>
   )
 }

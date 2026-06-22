@@ -120,18 +120,18 @@ function drawShape(
 
   // Vertikalni gradient — refleksija svjetla od vrha do dna
   const grad = ctx.createLinearGradient(0, -sizeY, 0, sizeY)
-  grad.addColorStop(0,    `rgba(34,  197, 94,  ${opacity * 0.42})`)
-  grad.addColorStop(0.22, `rgba(74,  222, 128, ${opacity * 0.95})`)
-  grad.addColorStop(0.50, `rgba(34,  197, 94,  ${opacity})`)
-  grad.addColorStop(0.75, `rgba(22,  163, 74,  ${opacity * 0.62})`)
-  grad.addColorStop(1,    `rgba(74,  222, 128, ${opacity * 0.36})`)
+  grad.addColorStop(0,    `rgba(31, 214, 95,  ${opacity * 0.42})`)
+  grad.addColorStop(0.22, `rgba(84, 233, 138, ${opacity * 0.95})`)
+  grad.addColorStop(0.50, `rgba(31, 214, 95,  ${opacity})`)
+  grad.addColorStop(0.75, `rgba(15, 94, 64,   ${opacity * 0.66})`)
+  grad.addColorStop(1,    `rgba(12, 61, 45,   ${opacity * 0.42})`)
   ctx.fillStyle = grad
 
   // Border koji pulsira sinusom — od tamne zelene do bijelo-zelenog sjaja
   const shimmer = Math.sin(time * shimmerSpeed + shimmerPhase) * 0.5 + 0.5
-  const rC = Math.round(34  + shimmer * 192)
-  const gC = Math.round(197 + shimmer * 40)
-  const bC = Math.round(94  + shimmer * 136)
+  const rC = Math.round(31  + shimmer * 195)
+  const gC = Math.round(214 + shimmer * 23)
+  const bC = Math.round(95  + shimmer * 135)
   ctx.strokeStyle = `rgba(${rC}, ${gC}, ${bC}, ${Math.min(opacity * (0.22 + shimmer * 1.5), 1)})`
   ctx.lineWidth   = 0.6 + shimmer * 2.4
 

@@ -160,7 +160,7 @@ export default function CurtainMesh() {
           const c = pts[i + 1][j], d = pts[i][j + 1]
           const disp = Math.hypot(a.dx - a.bx, a.dy - a.by)
           const op = 0.06 + Math.min(disp / NORM, 1) * 0.26
-          g.strokeStyle = `rgba(34,197,94,${op.toFixed(3)})`
+          g.strokeStyle = `rgba(31, 214, 95,${op.toFixed(3)})`
           g.beginPath()
           g.moveTo(a.dx, a.dy); g.lineTo(b.dx, b.dy)
           g.moveTo(c.dx, c.dy); g.lineTo(d.dx, d.dy)
@@ -176,7 +176,7 @@ export default function CurtainMesh() {
         }
         const px = reduce ? pt.x : pt.x + Math.sin(t * 0.8 + pt.phase) * pt.drift
         const tw = reduce ? 0.3 : 0.35 + 0.35 * (0.5 + 0.5 * Math.sin(t * 1.6 + pt.phase))
-        g.fillStyle = `rgba(74,222,128,${(tw * 0.18).toFixed(3)})`   // halo
+        g.fillStyle = `rgba(84, 233, 138,${(tw * 0.18).toFixed(3)})`   // halo
         g.beginPath(); g.arc(px, pt.y, pt.r * 2.6, 0, Math.PI * 2); g.fill()
         g.fillStyle = `rgba(167,243,208,${tw.toFixed(3)})`          // jezgro
         g.beginPath(); g.arc(px, pt.y, pt.r, 0, Math.PI * 2); g.fill()
@@ -186,8 +186,8 @@ export default function CurtainMesh() {
       if (!reduce && energy > 0.01 && mx > -R && mx < W + R && my > -R && my < H + R) {
         const a = energy * 0.2
         const grad = g.createRadialGradient(mx, my, 0, mx, my, R * 0.95)
-        grad.addColorStop(0, `rgba(74,222,128,${a.toFixed(3)})`)
-        grad.addColorStop(1, 'rgba(34,197,94,0)')
+        grad.addColorStop(0, `rgba(84, 233, 138,${a.toFixed(3)})`)
+        grad.addColorStop(1, 'rgba(31, 214, 95,0)')
         g.fillStyle = grad
         g.fillRect(mx - R, my - R, R * 2, R * 2)
       }

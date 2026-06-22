@@ -1,5 +1,6 @@
-import { motion, AnimatePresence, useInView, useScroll, useSpring, useTransform, useMotionValueEvent } from 'framer-motion'
+import { m, AnimatePresence, useInView, useScroll, useSpring, useTransform, useMotionValueEvent } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import AnimatedWords from './AnimatedWords'
 
 /* ── Ikonice po koraku (stroke = currentColor) ── */
@@ -25,43 +26,23 @@ function AnchorIcon() {
   // Identično logo-u (AncoraSVGLogo): iste putanje, tanak ujednačen stroke, aspect 1:1.2
   return (
     <svg width="22" height="26" viewBox="0 0 100 120" fill="none">
-      <circle cx="50" cy="11" r="8" stroke="currentColor" strokeWidth="2.3" />
-      <line x1="50" y1="19" x2="50" y2="92" stroke="currentColor" strokeWidth="2.3" />
-      <path d="M50,34 C66,43 66,78 50,87 C34,78 34,43 50,34Z" stroke="currentColor" strokeWidth="2.3" fill="none" />
-      <path d="M14,84 Q50,105 86,84" stroke="currentColor" strokeWidth="2.3" fill="none" strokeLinecap="round" />
-      <path d="M14,84 L7,75"  stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
-      <path d="M14,84 L20,77" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
-      <path d="M86,84 L93,75" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
-      <path d="M86,84 L80,77" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
+      <circle cx="50" cy="11" r="7" stroke="currentColor" strokeWidth="2.3" />
+      <line x1="50" y1="18" x2="50" y2="88" stroke="currentColor" strokeWidth="2.3" />
+      <path d="M31,29 L69,29" stroke="currentColor" strokeWidth="2.3" fill="none" />
+      <path d="M22,66 C27,84 39,89 50,89 C61,89 73,84 78,66" stroke="currentColor" strokeWidth="2.3" fill="none" strokeLinecap="round" />
+      <path d="M22,66 L15,61"  stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
+      <path d="M22,66 L27,57" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
+      <path d="M78,66 L85,61" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
+      <path d="M78,66 L73,57" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
     </svg>
   )
 }
 
+// title/description dolaze iz i18n po indeksu
 const steps = [
-  {
-    number: '01',
-    title: 'Tell us about yourself',
-    description: 'Create your profile and describe who you are, so Ancora understands your perspective from the start.',
-    Icon: ProfileIcon,
-    Preview: ProfilePreview,
-    loopMs: 3200,
-  },
-  {
-    number: '02',
-    title: 'Describe your situation',
-    description: "Share what happened and who's involved. The more detail you give, the better the guidance.",
-    Icon: ChatIcon,
-    Preview: ChatPreview,
-    loopMs: 4600,
-  },
-  {
-    number: '03',
-    title: 'Get wise, honest advice',
-    description: 'Receive thoughtful counsel that protects your dignity and keeps you grounded in your values.',
-    Icon: AnchorIcon,
-    Preview: AdvicePreview,
-    loopMs: 4200,
-  },
+  { number: '01', Icon: ProfileIcon, Preview: ProfilePreview, loopMs: 3200 },
+  { number: '02', Icon: ChatIcon,    Preview: ChatPreview,    loopMs: 4600 },
+  { number: '03', Icon: AnchorIcon,  Preview: AdvicePreview,  loopMs: 4200 },
 ]
 
 /* Vraća broj ciklusa koji raste svakih `period` ms dok je `play` true */
@@ -76,6 +57,7 @@ function useLoop(play: boolean, period: number) {
 }
 
 export default function HowItWorks() {
+  const { t } = useTranslation()
   const headRef    = useRef(null)
   const headInView = useInView(headRef, { once: true, margin: '-80px' })
 
@@ -122,12 +104,12 @@ export default function HowItWorks() {
             style={{ fontFamily: 'Playfair Display, serif', color: '#1A1A1A' }}
           >
             <AnimatedWords isInView={headInView} delay={0} stagger={0.07}>
-              How it works
+              {t('how.title')}
             </AnimatedWords>
           </h2>
           <p className="text-lg max-w-md mx-auto" style={{ color: '#6B7280' }}>
             <AnimatedWords isInView={headInView} delay={0.25} stagger={0.045}>
-              Three simple steps to get the clarity you need.
+              {t('how.subtitle')}
             </AnimatedWords>
           </p>
         </div>
@@ -197,18 +179,18 @@ function JourneyLine({ w, h, progress }: { w: number; h: number; progress: impor
         <defs>
           {/* Reveal maska — otkriva zeleni lanac odozgo prema dolje na scroll */}
           <clipPath id="journey-reveal">
-            <motion.rect x="0" y="0" width="100%" height={revealPct} />
+            <m.rect x="0" y="0" width="100%" height={revealPct} />
           </clipPath>
           {/* Metalik sheen — svjetlo "hvata" uvijanje niti */}
           <linearGradient id="chainMetal" gradientUnits="userSpaceOnUse" x1={cx - amp - 4} y1="0" x2={cx + amp + 4} y2="0">
             <stop offset="0%"   stopColor="#15803D" />
-            <stop offset="50%"  stopColor="#6EE7A0" />
+            <stop offset="50%"  stopColor="#1FA055" />
             <stop offset="100%" stopColor="#15803D" />
           </linearGradient>
         </defs>
-        {/* Faint upletene niti — vodilja */}
-        <path d={dA} stroke="#A7F3D0" strokeWidth="2.5" strokeLinecap="round" />
-        <path d={dB} stroke="#BBF7D0" strokeWidth="2.5" strokeLinecap="round" />
+        {/* Faint upletene niti — vodilja (suptilni duboki emerald track, ostaje tamno) */}
+        <path d={dA} stroke="#15803D" strokeWidth="2.5" strokeLinecap="round" opacity="0.3" />
+        <path d={dB} stroke="#15803D" strokeWidth="2.5" strokeLinecap="round" opacity="0.22" />
         {/* Zeleni upleteni lanac — otkriven do glave sidra */}
         <g clipPath="url(#journey-reveal)">
           <path d={dA} stroke="url(#chainMetal)" strokeWidth="2.5" strokeLinecap="round" />
@@ -216,7 +198,7 @@ function JourneyLine({ w, h, progress }: { w: number; h: number; progress: impor
         </g>
       </svg>
       {/* Sidro koje prati putanju */}
-      <motion.div
+      <m.div
         className="absolute top-0 left-0"
         style={{
           width: 50, height: 50,
@@ -230,33 +212,34 @@ function JourneyLine({ w, h, progress }: { w: number; h: number; progress: impor
           className="absolute inset-0 rounded-full flex items-center justify-center"
           style={{
             background: 'radial-gradient(circle at 30% 25%, #FFFFFF 0%, #F0FDF4 100%)',
-            boxShadow: '0 0 0 1px rgba(34,197,94,0.2), 0 4px 14px rgba(34,197,94,0.4)',
+            boxShadow: '0 0 0 1px rgba(31, 214, 95,0.2), 0 4px 14px rgba(31, 214, 95,0.4)',
           }}
         >
           {/* Sidro se blago njiše, kao da visi sa linije */}
-          <motion.div
+          <m.div
             style={{ originY: 0.1 }}
             animate={{ rotate: [-7, 7, -7] }}
             transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut' }}
           >
             <svg width="23" height="28" viewBox="0 0 100 120" fill="none">
-              <circle cx="50" cy="11" r="8" stroke="#22C55E" strokeWidth="6" />
-              <line x1="50" y1="19" x2="50" y2="92" stroke="#22C55E" strokeWidth="6" />
-              <path d="M50,34 C66,43 66,78 50,87 C34,78 34,43 50,34Z" stroke="#22C55E" strokeWidth="6" fill="none" />
-              <path d="M14,84 Q50,105 86,84" stroke="#22C55E" strokeWidth="6" fill="none" strokeLinecap="round" />
-              <path d="M14,84 L7,75"  stroke="#22C55E" strokeWidth="6" strokeLinecap="round" />
-              <path d="M14,84 L20,77" stroke="#22C55E" strokeWidth="6" strokeLinecap="round" />
-              <path d="M86,84 L93,75" stroke="#22C55E" strokeWidth="6" strokeLinecap="round" />
-              <path d="M86,84 L80,77" stroke="#22C55E" strokeWidth="6" strokeLinecap="round" />
+              <circle cx="50" cy="11" r="7" stroke="#1FD65F" strokeWidth="6" />
+              <line x1="50" y1="18" x2="50" y2="88" stroke="#1FD65F" strokeWidth="6" />
+              <path d="M31,29 L69,29" stroke="#1FD65F" strokeWidth="6" fill="none" />
+              <path d="M22,66 C27,84 39,89 50,89 C61,89 73,84 78,66" stroke="#1FD65F" strokeWidth="6" fill="none" strokeLinecap="round" />
+              <path d="M22,66 L15,61"  stroke="#1FD65F" strokeWidth="6" strokeLinecap="round" />
+              <path d="M22,66 L27,57" stroke="#1FD65F" strokeWidth="6" strokeLinecap="round" />
+              <path d="M78,66 L85,61" stroke="#1FD65F" strokeWidth="6" strokeLinecap="round" />
+              <path d="M78,66 L73,57" stroke="#1FD65F" strokeWidth="6" strokeLinecap="round" />
             </svg>
-          </motion.div>
+          </m.div>
         </div>
-      </motion.div>
+      </m.div>
     </div>
   )
 }
 
 function StepRow({ step, index, lit }: { step: typeof steps[number]; index: number; lit: boolean }) {
+  const { t }   = useTranslation()
   const ref     = useRef(null)
   const inView  = useInView(ref, { once: true, margin: '-120px' })
   const reverse = index % 2 === 1
@@ -268,7 +251,7 @@ function StepRow({ step, index, lit }: { step: typeof steps[number]; index: numb
     <div ref={ref} className="relative z-10 grid md:grid-cols-2 gap-10 lg:gap-16 items-center py-6 md:py-10">
 
       {/* ── Tekst ── */}
-      <motion.div
+      <m.div
         initial={{ opacity: 0, x: reverse ? 50 : -50 }}
         animate={inView ? { opacity: 1, x: 0 } : {}}
         transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
@@ -281,7 +264,7 @@ function StepRow({ step, index, lit }: { step: typeof steps[number]; index: numb
             fontFamily: 'Playfair Display, serif',
             fontSize: '120px',
             fontWeight: 600,
-            color: 'rgba(34,197,94,0.06)',
+            color: 'rgba(31, 214, 95,0.07)',
             zIndex: 0,
           }}
         >
@@ -291,22 +274,22 @@ function StepRow({ step, index, lit }: { step: typeof steps[number]; index: numb
         <div className="relative" style={{ zIndex: 1 }}>
           {/* Ikonica + STEP label */}
           <div className="flex items-center gap-4 mb-5">
-            <motion.div
+            <m.div
               initial={{ scale: 0.5, opacity: 0, rotate: -12 }}
               animate={inView ? { scale: 1, opacity: 1, rotate: 0 } : {}}
               transition={{ duration: 0.5, delay: 0.1, type: 'spring', stiffness: 240, damping: 14 }}
               className="flex-shrink-0 w-14 h-14 rounded-2xl flex items-center justify-center"
               style={{
-                backgroundColor: lit ? '#22C55E' : 'rgba(34,197,94,0.12)',
-                color: lit ? '#FFFFFF' : '#22C55E',
-                boxShadow: lit ? '0 8px 24px rgba(34,197,94,0.45)' : '0 0 0 rgba(0,0,0,0)',
+                backgroundColor: lit ? '#15803D' : 'rgba(21, 128, 61,0.12)',
+                color: lit ? '#FFFFFF' : '#15803D',
+                boxShadow: lit ? '0 8px 24px rgba(21, 128, 61,0.45)' : '0 0 0 rgba(0,0,0,0)',
                 transition: 'background-color 0.45s ease, color 0.45s ease, box-shadow 0.45s ease',
               }}
             >
               <Icon />
-            </motion.div>
-            <span className="text-xs font-semibold tracking-widest" style={{ color: '#22C55E' }}>
-              STEP {step.number}
+            </m.div>
+            <span className="text-xs font-semibold tracking-widest" style={{ color: '#15803D' }}>
+              {t('how.step')} {step.number}
             </span>
           </div>
 
@@ -315,38 +298,38 @@ function StepRow({ step, index, lit }: { step: typeof steps[number]; index: numb
             style={{ fontFamily: 'Playfair Display, serif', color: '#1A1A1A' }}
           >
             <AnimatedWords isInView={inView} delay={0.2} stagger={0.05}>
-              {step.title}
+              {t(`how.steps.${index}.title`)}
             </AnimatedWords>
           </h3>
-          <motion.p
+          <m.p
             initial={{ opacity: 0 }}
             animate={inView ? { opacity: 1 } : {}}
             transition={{ duration: 0.6, delay: 0.5 }}
             className="text-base leading-relaxed max-w-md"
             style={{ color: '#6B7280' }}
           >
-            {step.description}
-          </motion.p>
+            {t(`how.steps.${index}.description`)}
+          </m.p>
         </div>
-      </motion.div>
+      </m.div>
 
       {/* ── Preview ── */}
-      <motion.div
+      <m.div
         initial={{ opacity: 0, x: reverse ? -50 : 50, scale: 0.96 }}
         animate={inView ? { opacity: 1, x: 0, scale: 1 } : {}}
         transition={{ duration: 0.7, delay: 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
         whileHover={{ y: -6 }}
-        className={`relative rounded-3xl border overflow-hidden transition-shadow duration-300 hover:shadow-[0_18px_50px_rgba(34,197,94,0.10)] ${reverse ? 'md:order-1' : ''}`}
+        className={`relative rounded-3xl border overflow-hidden transition-shadow duration-300 hover:shadow-[0_18px_50px_rgba(31, 214, 95,0.10)] ${reverse ? 'md:order-1' : ''}`}
         style={{ borderColor: '#E5E7EB', backgroundColor: '#FAFAFA' }}
       >
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 70% 70% at 100% 0%, rgba(34,197,94,0.06) 0%, transparent 60%)' }}
+          style={{ background: 'radial-gradient(ellipse 70% 70% at 100% 0%, rgba(31, 214, 95,0.06) 0%, transparent 60%)' }}
         />
         <div className="relative p-8 flex items-center justify-center" style={{ minHeight: 300 }}>
           {/* AnimatePresence + key={cycle} → glatki fade na svaki restart loop-a */}
           <AnimatePresence mode="wait">
-            <motion.div
+            <m.div
               key={cycle}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -355,10 +338,10 @@ function StepRow({ step, index, lit }: { step: typeof steps[number]; index: numb
               className="w-full flex justify-center"
             >
               <Preview play={inView} />
-            </motion.div>
+            </m.div>
           </AnimatePresence>
         </div>
-      </motion.div>
+      </m.div>
     </div>
   )
 }
@@ -366,47 +349,47 @@ function StepRow({ step, index, lit }: { step: typeof steps[number]; index: numb
 /* ── Preview paneli — pokreću se na mount (svaki loop ciklus ih remount-uje) ── */
 
 function ProfilePreview({ play }: { play: boolean }) {
-  const traits = ['Honest', 'Introvert', 'Values family']
+  const { t } = useTranslation()
   return (
     <div className="w-full max-w-sm rounded-2xl bg-white border p-6 shadow-sm" style={{ borderColor: '#E5E7EB' }}>
       <div className="flex items-center gap-4 mb-5">
-        <motion.div
+        <m.div
           initial={{ opacity: 0, scale: 0.6 }}
           animate={play ? { opacity: 1, scale: 1 } : {}}
           transition={{ duration: 0.4, ease: 'easeOut' }}
           className="w-14 h-14 rounded-full flex items-center justify-center text-lg font-semibold"
-          style={{ backgroundColor: 'rgba(34,197,94,0.12)', color: '#22C55E', fontFamily: 'Playfair Display, serif' }}
+          style={{ backgroundColor: 'rgba(31, 214, 95,0.12)', color: '#1FD65F', fontFamily: 'Playfair Display, serif' }}
         >
-          You
-        </motion.div>
+          {t('how.profile.you')}
+        </m.div>
         <div className="flex-1">
-          <motion.div initial={{ width: 0 }} animate={play ? { width: '60%' } : {}} transition={{ duration: 0.5, delay: 0.15 }}
+          <m.div initial={{ width: 0 }} animate={play ? { width: '60%' } : {}} transition={{ duration: 0.5, delay: 0.15 }}
             className="h-3 rounded-full mb-2" style={{ backgroundColor: '#E5E7EB' }} />
-          <motion.div initial={{ width: 0 }} animate={play ? { width: '85%' } : {}} transition={{ duration: 0.5, delay: 0.28 }}
+          <m.div initial={{ width: 0 }} animate={play ? { width: '85%' } : {}} transition={{ duration: 0.5, delay: 0.28 }}
             className="h-2.5 rounded-full" style={{ backgroundColor: '#F0F0F0' }} />
         </div>
       </div>
       <div className="flex flex-wrap gap-2">
-        {traits.map((t, i) => (
-          <motion.span
-            key={t}
+        {[0, 1, 2].map((i) => (
+          <m.span
+            key={i}
             initial={{ opacity: 0, scale: 0.8, y: 6 }}
             animate={play ? { opacity: 1, scale: 1, y: 0 } : {}}
             transition={{ delay: 0.45 + i * 0.13, type: 'spring', stiffness: 300, damping: 18 }}
             className="px-3 py-1.5 rounded-full text-xs font-medium"
-            style={{ backgroundColor: 'rgba(34,197,94,0.1)', color: '#16A34A' }}
+            style={{ backgroundColor: 'rgba(31, 214, 95,0.12)', color: '#1FD65F' }}
           >
-            {t}
-          </motion.span>
+            {t(`how.profile.traits.${i}`)}
+          </m.span>
         ))}
       </div>
     </div>
   )
 }
 
-const CHAT_MSG = "I had a falling out with my brother over our late father's house, and I don't know how to fix it."
-
 function ChatPreview({ play }: { play: boolean }) {
+  const { t } = useTranslation()
+  const msg = t('how.chat.message')
   const [typed, setTyped] = useState('')
   const [showDots, setShowDots] = useState(false)
   useEffect(() => {
@@ -414,26 +397,26 @@ function ChatPreview({ play }: { play: boolean }) {
     let i = 0
     const id = setInterval(() => {
       i++
-      setTyped(CHAT_MSG.slice(0, i))
-      if (i >= CHAT_MSG.length) {
+      setTyped(msg.slice(0, i))
+      if (i >= msg.length) {
         clearInterval(id)
         setTimeout(() => setShowDots(true), 350)
       }
     }, 24)
     return () => clearInterval(id)
-  }, [play])
+  }, [play, msg])
 
   return (
     <div className="w-full max-w-sm flex flex-col gap-3">
       <div
         className="self-end max-w-[80%] rounded-2xl rounded-br-sm px-4 py-3 text-sm leading-relaxed text-white"
-        style={{ backgroundColor: '#22C55E', minHeight: 24 }}
+        style={{ backgroundColor: '#1FD65F', minHeight: 24 }}
       >
         {typed}
-        {play && typed.length < CHAT_MSG.length && <span className="inline-block w-0.5 h-4 ml-0.5 align-middle bg-white/80 animate-pulse" />}
+        {play && typed.length < msg.length && <span className="inline-block w-0.5 h-4 ml-0.5 align-middle bg-white/80 animate-pulse" />}
       </div>
       {showDots && (
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
@@ -441,59 +424,59 @@ function ChatPreview({ play }: { play: boolean }) {
           style={{ borderColor: '#E5E7EB' }}
         >
           {[0, 1, 2].map(i => (
-            <motion.span
+            <m.span
               key={i}
               className="w-1.5 h-1.5 rounded-full"
-              style={{ backgroundColor: '#22C55E' }}
+              style={{ backgroundColor: '#1FD65F' }}
               animate={{ opacity: [0.3, 1, 0.3], y: [0, -3, 0] }}
               transition={{ duration: 1, repeat: Infinity, delay: i * 0.18 }}
             />
           ))}
-        </motion.div>
+        </m.div>
       )}
     </div>
   )
 }
 
-const ADVICE = 'Before reacting, name what you actually feel. Reach out to your brother to understand him — not to win.'
-
 function AdvicePreview({ play }: { play: boolean }) {
+  const { t } = useTranslation()
+  const advice = t('how.advice.text')
   const [typed, setTyped] = useState('')
   useEffect(() => {
     if (!play) return
     let i = 0
     const id = setInterval(() => {
       i++
-      setTyped(ADVICE.slice(0, i))
-      if (i >= ADVICE.length) clearInterval(id)
+      setTyped(advice.slice(0, i))
+      if (i >= advice.length) clearInterval(id)
     }, 24)
     return () => clearInterval(id)
-  }, [play])
+  }, [play, advice])
 
   return (
     <div className="w-full max-w-sm flex flex-col gap-3">
-      <motion.div
+      <m.div
         initial={{ opacity: 0 }} animate={play ? { opacity: 1 } : {}} transition={{ duration: 0.3 }}
         className="flex items-center gap-2"
       >
         <div
           className="w-7 h-7 rounded-full flex items-center justify-center"
-          style={{ backgroundColor: 'rgba(34,197,94,0.12)', color: '#22C55E' }}
+          style={{ backgroundColor: 'rgba(31, 214, 95,0.12)', color: '#1FD65F' }}
         >
           <svg width="14" height="14" viewBox="0 0 100 120" fill="none">
-            <circle cx="50" cy="11" r="8" stroke="currentColor" strokeWidth="4" />
-            <line x1="50" y1="19" x2="50" y2="92" stroke="currentColor" strokeWidth="4" />
-            <path d="M14,84 Q50,105 86,84" stroke="currentColor" strokeWidth="4" fill="none" strokeLinecap="round" />
+            <circle cx="50" cy="11" r="7" stroke="currentColor" strokeWidth="4" />
+            <line x1="50" y1="18" x2="50" y2="88" stroke="currentColor" strokeWidth="4" />
+            <path d="M22,66 C27,84 39,89 50,89 C61,89 73,84 78,66" stroke="currentColor" strokeWidth="4" fill="none" strokeLinecap="round" />
           </svg>
         </div>
-        <span className="text-xs font-semibold tracking-wide" style={{ color: '#16A34A' }}>Ancora</span>
-      </motion.div>
+        <span className="text-xs font-semibold tracking-wide" style={{ color: '#1FD65F' }}>{t('how.advice.name')}</span>
+      </m.div>
       <div
         className="rounded-2xl rounded-tl-sm px-5 py-4 bg-white border text-[15px] leading-relaxed"
         style={{ borderColor: '#E5E7EB', color: '#374151', minHeight: 92 }}
       >
         {typed}
-        {play && typed.length < ADVICE.length && <span className="inline-block w-0.5 h-4 ml-0.5 align-middle animate-pulse" style={{ backgroundColor: '#22C55E' }} />}
+        {play && typed.length < advice.length && <span className="inline-block w-0.5 h-4 ml-0.5 align-middle animate-pulse" style={{ backgroundColor: '#1FD65F' }} />}
       </div>
     </div>
   )
