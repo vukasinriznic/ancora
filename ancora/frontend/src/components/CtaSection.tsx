@@ -86,15 +86,16 @@ export default function CtaSection() {
   const tRef    = useRef(null)
   const tInView = useInView(tRef, { once: true, margin: '-120px' })
 
-  const [idx, setIdx]       = useState(0)
-  const [paused, setPaused] = useState(false)
+  const [idx, setIdx] = useState(0)
 
-  // Auto-rotacija kreće tek kad testimonial uđe u vidno polje
+  // Auto-rotacija (kreće kad testimonial uđe u vidno polje). setTimeout je vezan
+  // za `idx` → ručni klik na tačkicu resetuje tajmer, pa se sledeća smena desi
+  // tek nakon punog intervala (vremena da se pročita izabrani citat).
   useEffect(() => {
-    if (paused || !tInView) return
-    const id = setInterval(() => setIdx(i => (i + 1) % testimonials.length), 5200)
-    return () => clearInterval(id)
-  }, [paused, tInView])
+    if (!tInView) return
+    const id = setTimeout(() => setIdx(i => (i + 1) % testimonials.length), 5200)
+    return () => clearTimeout(id)
+  }, [tInView, idx])
 
   const tm = testimonials[idx]
 
@@ -135,8 +136,6 @@ export default function CtaSection() {
         <div
           ref={tRef}
           className="relative z-10 max-w-2xl mx-auto text-center"
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
         >
           <m.div
             className="text-xs font-semibold tracking-[0.25em] uppercase mb-3" style={{ color: '#1FD65F' }}
