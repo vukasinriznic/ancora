@@ -54,7 +54,7 @@ export default function Navbar() {
         transition:    'background-color 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease, backdrop-filter 0.3s ease, -webkit-backdrop-filter 0.3s ease',
       }}
     >
-      <div className="max-w-6xl mx-auto px-8 py-5 flex items-center justify-between">
+      <div className="max-w-6xl mx-auto px-5 sm:px-8 py-5 flex items-center justify-between">
 
         {/* ── Logo ── */}
         <div className="flex items-center gap-3 cursor-pointer select-none">
@@ -68,7 +68,7 @@ export default function Navbar() {
         </div>
 
         {/* ── Desna strana ── */}
-        <div className="flex items-center gap-7">
+        <div className="flex items-center gap-4 sm:gap-7">
 
           {/* EN/SR switch — aktivni jezik je istaknut */}
           <div
@@ -90,9 +90,9 @@ export default function Navbar() {
             >SR</button>
           </div>
 
-          {/* Log in */}
+          {/* Log in — sakriven na vrlo uskim ekranima (Get started pokriva CTA) */}
           <button
-            className="text-sm font-medium transition-colors duration-300 cursor-pointer"
+            className="hidden sm:block text-sm font-medium transition-colors duration-300 cursor-pointer"
             style={{ color: isDark ? '#9CA3AF' : '#4B5563' }}
             onMouseEnter={e => (e.currentTarget.style.color = isDark ? '#FFFFFF' : '#1A1A1A')}
             onMouseLeave={e => (e.currentTarget.style.color = isDark ? '#9CA3AF' : '#4B5563')}
