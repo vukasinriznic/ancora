@@ -1,5 +1,5 @@
 import { m, useInView, useReducedMotion } from 'framer-motion'
-import { useId, useRef, useState, type CSSProperties, type FC } from 'react'
+import { useEffect, useId, useRef, useState, type CSSProperties, type FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import AnimatedWords from './AnimatedWords'
 
@@ -233,10 +233,19 @@ function LiquidCard({ feature, index, inView, flat }: {
   const essence     = t(`features.items.${index}.essence`)
   const description = t(`features.items.${index}.description`)
 
+  // Desktop (md+): samo hover aktivira. Mobile: klik toggleuje obje strane.
+  const getIsDesktop = () => typeof window !== 'undefined' && window.innerWidth >= 768
+  const [isDesktop, setIsDesktop] = useState(getIsDesktop)
+  useEffect(() => {
+    const handler = () => setIsDesktop(getIsDesktop())
+    window.addEventListener('resize', handler)
+    return () => window.removeEventListener('resize', handler)
+  }, [])
+
   const [hovered, setHovered] = useState(false)
   const [focused, setFocused] = useState(false)
   const [tapped,  setTapped]  = useState(false)
-  const active = !flat && (hovered || focused || tapped)
+  const active = !flat && (isDesktop ? (hovered || focused) : tapped)
 
   const decorations = (
     <>
@@ -320,12 +329,7 @@ function LiquidCard({ feature, index, inView, flat }: {
       aria-label={`${title} — ${essence}`}
       onFocus={() => setFocused(true)}
       onBlur={() => setFocused(false)}
-      onClick={() => {
-        const next = !tapped
-        setTapped(next)
-        // Kad se gasi tapped, resetuj i hover da active zaista postane false
-        if (!next) setHovered(false)
-      }}
+      onClick={isDesktop ? undefined : () => setTapped(prev => !prev)}
       className="relative outline-none focus-visible:ring-2"
       style={{ ...baseStyle, height: CARD_H, ['--tw-ring-color' as string]: 'rgba(21, 128, 61,0.45)' } as CSSProperties}
     >
@@ -340,7 +344,7 @@ function LiquidCard({ feature, index, inView, flat }: {
         <div className="relative h-full p-7 flex flex-col">
           {frontInner}
           <div className="mt-auto pt-4 flex items-center gap-1.5 text-xs font-medium" style={{ color: '#15803D' }}>
-            <span>{t('features.diveIn')}</span>
+            <span>{isDesktop ? t('features.diveIn') : t('features.diveInMobile')}</span>
             <AnchorGlyph size={14} color="currentColor" strokeWidth={2} />
           </div>
         </div>
