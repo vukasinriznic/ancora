@@ -320,7 +320,12 @@ function LiquidCard({ feature, index, inView, flat }: {
       aria-label={`${title} — ${essence}`}
       onFocus={() => setFocused(true)}
       onBlur={() => setFocused(false)}
-      onClick={() => setTapped((t) => !t)}
+      onClick={() => {
+        const next = !tapped
+        setTapped(next)
+        // Kad se gasi tapped, resetuj i hover da active zaista postane false
+        if (!next) setHovered(false)
+      }}
       className="relative outline-none focus-visible:ring-2"
       style={{ ...baseStyle, height: CARD_H, ['--tw-ring-color' as string]: 'rgba(21, 128, 61,0.45)' } as CSSProperties}
     >

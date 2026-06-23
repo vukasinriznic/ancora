@@ -68,7 +68,7 @@ export default function About() {
             <path d="M78,66 L85,61" stroke="#1FD65F" strokeWidth="6" strokeLinecap="round" />
             <path d="M78,66 L73,57" stroke="#1FD65F" strokeWidth="6" strokeLinecap="round" />
           </svg>
-          <span className="text-xs font-medium tracking-[0.25em] uppercase" style={{ color: 'rgba(31, 214, 95,0.85)' }}>
+          <span className="text-[10px] sm:text-xs font-medium tracking-[0.12em] sm:tracking-[0.25em] uppercase text-center" style={{ color: 'rgba(31, 214, 95,0.85)' }}>
             {t('about.principle')}
           </span>
           <span className="h-px w-8" style={{ background: 'linear-gradient(90deg, rgba(31, 214, 95,0.5), transparent)' }} />

@@ -26,7 +26,7 @@ const en = {
   features: {
     title: 'Why Ancora',
     subtitle: 'More than advice — a thoughtful companion for every relationship challenge.',
-    diveIn: 'Dive in',
+    diveIn: 'Click to dive in',
     items: [
       { title: 'Context-aware AI', essence: 'Advice that remembers.', description: 'Ancora remembers your conversations and the people involved, so the guidance evolves with you over time.' },
       { title: 'No judgment', essence: 'A safe space, always.', description: 'Share what you really feel and be heard with care. No lectures, no shame — only thoughtful understanding.' },
@@ -92,7 +92,7 @@ const sr: typeof en = {
   features: {
     title: 'Zašto Ancora',
     subtitle: 'Više od saveta — promišljen saputnik za svaki izazov u odnosima.',
-    diveIn: 'Zaroni',
+    diveIn: 'Klikni da zaroniš',
     items: [
       { title: 'AI koji pamti kontekst', essence: 'Savet koji pamti.', description: 'Ancora pamti tvoje razgovore i ljude u njima, pa savet raste zajedno s tobom.' },
       { title: 'Bez osude', essence: 'Uvek bezbedan prostor.', description: 'Podeli šta zaista osećaš i budi saslušan s pažnjom. Bez pridika, bez stida — samo promišljeno razumevanje.' },
