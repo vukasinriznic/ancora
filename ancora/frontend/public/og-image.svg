@@ -1,0 +1,55 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0C3D2D"/>
+      <stop offset="50%" stop-color="#07130E"/>
+      <stop offset="100%" stop-color="#0C3D2D"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1FD65F" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#1FD65F" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Subtle radial glow in center -->
+  <ellipse cx="600" cy="300" rx="480" ry="280" fill="url(#glow)"/>
+
+  <!-- Anchor logo (Classic shape, top-left) -->
+  <g transform="translate(80, 72) scale(0.55)" stroke="#1FD65F" stroke-width="5.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="50" cy="11" r="7"/>
+    <line x1="50" y1="18" x2="50" y2="88"/>
+    <line x1="31" y1="29" x2="69" y2="29"/>
+    <path d="M22,66 C27,84 39,89 50,89 C61,89 73,84 78,66"/>
+    <path d="M22,66 L15,61"/><path d="M22,66 L27,57"/>
+    <path d="M78,66 L85,61"/><path d="M78,66 L73,57"/>
+  </g>
+
+  <!-- Wordmark -->
+  <text x="140" y="108" font-family="Georgia, serif" font-size="38" font-weight="600" fill="#FFFFFF" letter-spacing="1">Ancora</text>
+
+  <!-- Main headline -->
+  <text x="80" y="280" font-family="Georgia, serif" font-size="86" font-weight="700" fill="#FFFFFF" letter-spacing="-1">Clarity in every</text>
+  <text x="80" y="380" font-family="Georgia, serif" font-size="86" font-weight="700" fill="#1FD65F" letter-spacing="-1">connection.</text>
+
+  <!-- Subtitle -->
+  <text x="82" y="456" font-family="Arial, sans-serif" font-size="28" fill="rgba(255,255,255,0.6)" letter-spacing="0.2">Wise, dignified relationship advice — whenever you need it.</text>
+
+  <!-- Bottom divider line -->
+  <line x1="80" y1="530" x2="400" y2="530" stroke="#1FD65F" stroke-width="1.5" stroke-opacity="0.4"/>
+
+  <!-- URL hint -->
+  <text x="80" y="568" font-family="Arial, sans-serif" font-size="22" fill="rgba(255,255,255,0.35)" letter-spacing="0.5">ancora.app</text>
+
+  <!-- Decorative anchor watermark (right side) -->
+  <g transform="translate(880, 180) scale(2.8)" stroke="#1FD65F" stroke-width="5.5" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.07">
+    <circle cx="50" cy="11" r="7"/>
+    <line x1="50" y1="18" x2="50" y2="88"/>
+    <line x1="31" y1="29" x2="69" y2="29"/>
+    <path d="M22,66 C27,84 39,89 50,89 C61,89 73,84 78,66"/>
+    <path d="M22,66 L15,61"/><path d="M22,66 L27,57"/>
+    <path d="M78,66 L85,61"/><path d="M78,66 L73,57"/>
+  </g>
+</svg>
