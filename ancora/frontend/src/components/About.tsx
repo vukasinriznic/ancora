@@ -7,14 +7,15 @@ import CurtainMesh from './CurtainMesh'
 const values = [0, 1, 2]
 
 export default function About() {
-  const { t }    = useTranslation()
-  const ref      = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: '-80px' })
+  const { t }        = useTranslation()
+  const ref          = useRef(null)
+  const isInView     = useInView(ref, { once: true, margin: '-100px' })
+  const valuesRef    = useRef(null)
+  const valuesInView = useInView(valuesRef, { once: true, margin: '-80px' })
 
   return (
     <section
       id="about"
-      ref={ref}
       data-theme="dark"
       className="relative min-h-screen flex flex-col justify-center py-32 px-6 overflow-hidden"
       style={{
@@ -36,7 +37,7 @@ export default function About() {
         style={{ background: 'linear-gradient(90deg, rgba(4,12,9,0.55) 0%, transparent 16%, transparent 84%, rgba(4,12,9,0.55) 100%)' }}
       />
 
-      <div className="relative z-10 max-w-5xl mx-auto">
+      <div ref={ref} className="relative z-10 max-w-5xl mx-auto">
 
         {/* Big quote — word by word */}
         <blockquote className="text-center mb-6">
@@ -84,13 +85,13 @@ export default function About() {
         </p>
 
         {/* Values — glass pločice */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
+        <div ref={valuesRef} className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
           {values.map((i) => (
             <m.div
               key={i}
               initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.55, delay: 0.5 + i * 0.12, ease: [0.22, 1, 0.36, 1] }}
+              animate={valuesInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.55, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] }}
               className="group relative rounded-2xl p-8 text-center border border-white/10 bg-white/[0.03] backdrop-blur-sm transition-colors duration-500 hover:border-[#1FD65F]/40"
               style={{ boxShadow: '0 1px 0 rgba(255,255,255,0.04) inset' }}
             >

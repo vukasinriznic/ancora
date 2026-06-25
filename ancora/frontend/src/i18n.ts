@@ -21,16 +21,16 @@ const en = {
     ],
     profile: { you: 'You', traits: ['Honest', 'Introvert', 'Values family'] },
     chat: { message: "I had a falling out with my brother over our late father's house, and I don't know how to fix it." },
-    advice: { name: 'Ancora', text: 'Before reacting, name what you actually feel. Reach out to your brother to understand him — not to win.' },
+    advice: { name: 'Ancora', text: 'Before reacting, name what you actually feel. Reach out to your brother to understand him - not to win.' },
   },
   features: {
     title: 'Why Ancora',
-    subtitle: 'More than advice — a thoughtful companion for every relationship challenge.',
+    subtitle: 'More than advice - a thoughtful companion for every relationship challenge.',
     diveIn: 'Dive in',
     diveInMobile: 'Click to dive in',
     items: [
       { title: 'Context-aware AI', essence: 'Advice that remembers.', description: 'Ancora remembers your conversations and the people involved, so the guidance evolves with you over time.' },
-      { title: 'No judgment', essence: 'A safe space, always.', description: 'Share what you really feel and be heard with care. No lectures, no shame — only thoughtful understanding.' },
+      { title: 'No judgment', essence: 'A safe space, always.', description: 'Share what you really feel and be heard with care. No lectures, no shame - only thoughtful understanding.' },
       { title: 'Your dignity first', essence: 'Grounded in your values.', description: 'Every response keeps you respected and true to who you are, helping you act from strength, not impulse.' },
       { title: 'Available anytime', essence: 'Here at 3am.', description: "Whether it's the middle of the night or a hard Monday morning, Ancora is always ready to listen and help." },
     ],
@@ -38,7 +38,7 @@ const en = {
   about: {
     quote: '"The quality of your relationships defines the quality of your life."',
     principle: 'The Ancora principle',
-    paragraph: 'Ancora was built on the belief that everyone deserves honest, thoughtful guidance — not just generic advice, but counsel that respects who you are.',
+    paragraph: 'Ancora was built on the belief that everyone deserves honest, thoughtful guidance - not just generic advice, but counsel that respects who you are.',
     values: [
       { label: 'Honesty', desc: 'We tell you the truth, not what you want to hear.' },
       { label: 'Dignity', desc: 'Every response honours your worth and values.' },
@@ -59,7 +59,7 @@ const en = {
     reassurances: ['Free to start', 'Private & secure', 'No credit card'],
   },
   footer: {
-    tagline: 'Wise, dignified relationship advice — whenever you need it.',
+    tagline: 'Wise, dignified relationship advice - whenever you need it.',
     explore: 'Explore',
     legal: 'Legal',
     links: { how: 'How it works', why: 'Why Ancora', about: 'About', privacy: 'Privacy', terms: 'Terms' },
@@ -88,16 +88,16 @@ const sr: typeof en = {
     ],
     profile: { you: 'Ti', traits: ['Iskren', 'Introvert', 'Ceni porodicu'] },
     chat: { message: 'Posvađao sam se sa bratom oko kuće našeg pokojnog oca i ne znam kako da to popravim.' },
-    advice: { name: 'Ancora', text: 'Pre nego što reaguješ, imenuj šta zaista osećaš. Obrati se bratu da ga razumeš — ne da pobediš.' },
+    advice: { name: 'Ancora', text: 'Pre nego što reaguješ, imenuj šta zaista osećaš. Obrati se bratu da ga razumeš - ne da pobediš.' },
   },
   features: {
     title: 'Zašto Ancora',
-    subtitle: 'Više od saveta — promišljen saputnik za svaki izazov u odnosima.',
+    subtitle: 'Više od saveta - promišljen saputnik za svaki izazov u odnosima.',
     diveIn: 'Zaroni',
     diveInMobile: 'Klikni da zaroniš',
     items: [
       { title: 'AI koji pamti kontekst', essence: 'Savet koji pamti.', description: 'Ancora pamti tvoje razgovore i ljude u njima, pa savet raste zajedno s tobom.' },
-      { title: 'Bez osude', essence: 'Uvek bezbedan prostor.', description: 'Podeli šta zaista osećaš i budi saslušan s pažnjom. Bez pridika, bez stida — samo promišljeno razumevanje.' },
+      { title: 'Bez osude', essence: 'Uvek bezbedan prostor.', description: 'Podeli šta zaista osećaš i budi saslušan s pažnjom. Bez pridika, bez stida - samo promišljeno razumevanje.' },
       { title: 'Tvoje dostojanstvo na prvom mestu', essence: 'Utemeljeno u tvojim vrednostima.', description: 'Svaki odgovor te čuva poštovanim i vernim sebi, pomažući ti da deluješ iz snage, a ne iz impulsa.' },
       { title: 'Dostupna bilo kad', essence: 'Tu i u 3 ujutru.', description: 'Bilo da je gluvo doba noći ili teško ponedeljak ujutru, Ancora je uvek spremna da sasluša i pomogne.' },
     ],
@@ -105,7 +105,7 @@ const sr: typeof en = {
   about: {
     quote: '„Kvalitet tvojih odnosa određuje kvalitet tvog života."',
     principle: 'Ancora princip',
-    paragraph: 'Ancora je nastala iz uverenja da svako zaslužuje iskreno, promišljeno vođstvo — ne uopšten savet, već onaj koji poštuje ko si.',
+    paragraph: 'Ancora je nastala iz uverenja da svako zaslužuje iskreno, promišljeno vođstvo - ne uopšten savet, već onaj koji poštuje ko si.',
     values: [
       { label: 'Iskrenost', desc: 'Govorimo ti istinu, ne ono što želiš da čuješ.' },
       { label: 'Dostojanstvo', desc: 'Svaki odgovor poštuje tvoju vrednost i principe.' },
@@ -126,7 +126,7 @@ const sr: typeof en = {
     reassurances: ['Besplatno za početak', 'Privatno i sigurno', 'Bez kartice'],
   },
   footer: {
-    tagline: 'Mudar, dostojanstven savet za odnose — kad god ti zatreba.',
+    tagline: 'Mudar, dostojanstven savet za odnose - kad god ti zatreba.',
     explore: 'Istraži',
     legal: 'Pravno',
     links: { how: 'Kako funkcioniše', why: 'Zašto Ancora', about: 'O nama', privacy: 'Privatnost', terms: 'Uslovi' },

@@ -1,3 +1,4 @@
+import type { MouseEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import AncoraSVGLogo from './AncoraSVGLogo'
 
@@ -12,15 +13,27 @@ const legal = [
 ]
 
 function FooterLink({ label, href }: { label: string; href: string }) {
+  // Smooth scroll do sekcije (offset za fiksirani navbar); placeholder "#" ostaje default
+  const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
+    if (href.length > 1 && href.startsWith('#')) {
+      const el = document.querySelector(href)
+      if (el) {
+        e.preventDefault()
+        const top = el.getBoundingClientRect().top + window.scrollY - 72
+        window.scrollTo({ top, behavior: 'smooth' })
+      }
+    }
+  }
   return (
     <a
       href={href}
-      className="group relative inline-block text-sm transition-colors duration-200 hover:text-[#15803D]"
-      style={{ color: '#9CA3AF' }}
+      onClick={handleClick}
+      className="inline-block text-sm"
+      style={{ color: '#9CA3AF', transition: 'color 0.2s ease' }}
+      onMouseEnter={e => (e.currentTarget.style.color = '#1FD65F')}
+      onMouseLeave={e => (e.currentTarget.style.color = '#9CA3AF')}
     >
       {label}
-      {/* underline koji se iscrtava na hover */}
-      <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-[#15803D] transition-transform duration-300 ease-out group-hover:scale-x-100" />
     </a>
   )
 }

@@ -36,18 +36,22 @@ export default function Home() {
 
       <main
         className="overflow-x-clip relative"
-        style={{ zIndex: 1, paddingBottom: footerH }}
+        style={{ zIndex: 1, paddingBottom: footerH, pointerEvents: 'none' }}
       >
-        <CursorGlow />
-        <CursorTrail />
-        <Navbar />
-        <Hero />
-        <Suspense fallback={null}>
-          <HowItWorks />
-          <Features />
-          <About />
-          <CtaSection />
-        </Suspense>
+        {/* pointer-events:auto vraća interakciju sadržaju; prazan paddingBottom
+            (iznad fiksiranog footera) ostaje none → klik/hover prolaze do footera */}
+        <div style={{ pointerEvents: 'auto' }}>
+          <CursorGlow />
+          <CursorTrail />
+          <Navbar />
+          <Hero />
+          <Suspense fallback={null}>
+            <HowItWorks />
+            <Features />
+            <About />
+            <CtaSection />
+          </Suspense>
+        </div>
       </main>
     </>
   )

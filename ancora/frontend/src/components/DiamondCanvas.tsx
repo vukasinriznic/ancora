@@ -194,8 +194,10 @@ const DiamondCanvas = forwardRef<DiamondCanvasHandle>((_, ref) => {
       // Kristali se pojavljuju samo u gornjoj 2/3 (hero area).
       // Donja 1/3 je prostor u koji oblici mogu da ulete tokom eksplozije.
       // Manje rombova na mobilnom (uže = manje kolona).
-      const cols = canvas.width < 640 ? 2 : 4
-      diamondsRef.current = createDiamonds(canvas.width, canvas.height * (2 / 3), cols, 3)
+      const small = canvas.width < 640
+      const cols = small ? 2 : 5
+      const rows = small ? 4 : 3
+      diamondsRef.current = createDiamonds(canvas.width, canvas.height * (2 / 3), cols, rows)
     }
     resize()
     window.addEventListener('resize', resize)

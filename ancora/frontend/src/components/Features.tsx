@@ -245,6 +245,7 @@ function LiquidCard({ feature, index, inView, flat }: {
   const [hovered, setHovered] = useState(false)
   const [focused, setFocused] = useState(false)
   const [tapped,  setTapped]  = useState(false)
+  // Desktop: samo hover/focus aktivira (bez klik-toggla). Mobile: tap toggleuje.
   const active = !flat && (isDesktop ? (hovered || focused) : tapped)
 
   const decorations = (

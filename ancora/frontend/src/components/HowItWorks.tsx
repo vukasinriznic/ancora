@@ -94,20 +94,43 @@ export default function HowItWorks() {
   })
 
   return (
-    <section id="how-it-works" className="py-28 px-6 bg-white">
-      <div className="max-w-6xl mx-auto">
+    <section
+      id="how-it-works"
+      data-theme="dark"
+      className="relative py-28 px-6 overflow-hidden"
+      style={{ background: 'linear-gradient(180deg, #0C3D2D 0%, #0A2A20 12%, #07130E 50%, #0A2A20 88%, #0C3D2D 100%)' }}
+    >
+      {/* Spotlight — meko zeleno svjetlo iza naslova */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: 'radial-gradient(ellipse 55% 45% at 50% 16%, rgba(31,214,95,0.08) 0%, transparent 60%)' }}
+      />
+
+      {/* Talasasti prelaz na vrhu (iz bele Hero) i dnu (u belu Why Ancora) — isti talas kao na karticama */}
+      <div className="absolute top-0 left-0 right-0 pointer-events-none" style={{ lineHeight: 0, zIndex: 2 }} aria-hidden>
+        <svg viewBox="0 0 200 40" preserveAspectRatio="none" style={{ display: 'block', width: '100%', height: 70 }}>
+          <path d="M0,0 L200,0 L200,20 C184,34 166,34 150,20 C134,6 116,6 100,20 C84,34 66,34 50,20 C34,6 16,6 0,20 Z" fill="#FFFFFF" />
+        </svg>
+      </div>
+      <div className="absolute bottom-0 left-0 right-0 pointer-events-none" style={{ lineHeight: 0, zIndex: 2 }} aria-hidden>
+        <svg viewBox="0 0 200 40" preserveAspectRatio="none" style={{ display: 'block', width: '100%', height: 70 }}>
+          <path d="M0,40 L200,40 L200,20 C184,6 166,6 150,20 C134,34 116,34 100,20 C84,6 66,6 50,20 C34,34 16,34 0,20 Z" fill="#FFFFFF" />
+        </svg>
+      </div>
+
+      <div className="relative z-10 max-w-6xl mx-auto">
 
         {/* Naslov */}
         <div ref={headRef} className="text-center mb-20">
           <h2
             className="text-4xl md:text-5xl font-semibold mb-4"
-            style={{ fontFamily: 'Playfair Display, serif', color: '#1A1A1A' }}
+            style={{ fontFamily: 'Playfair Display, serif', color: '#FFFFFF' }}
           >
             <AnimatedWords isInView={headInView} delay={0} stagger={0.07}>
               {t('how.title')}
             </AnimatedWords>
           </h2>
-          <p className="text-lg max-w-md mx-auto" style={{ color: '#6B7280' }}>
+          <p className="text-lg max-w-md mx-auto" style={{ color: 'rgba(255,255,255,0.55)' }}>
             <AnimatedWords isInView={headInView} delay={0.25} stagger={0.045}>
               {t('how.subtitle')}
             </AnimatedWords>
@@ -183,14 +206,14 @@ function JourneyLine({ w, h, progress }: { w: number; h: number; progress: impor
           </clipPath>
           {/* Metalik sheen — svjetlo "hvata" uvijanje niti */}
           <linearGradient id="chainMetal" gradientUnits="userSpaceOnUse" x1={cx - amp - 4} y1="0" x2={cx + amp + 4} y2="0">
-            <stop offset="0%"   stopColor="#15803D" />
-            <stop offset="50%"  stopColor="#1FA055" />
-            <stop offset="100%" stopColor="#15803D" />
+            <stop offset="0%"   stopColor="#1FA055" />
+            <stop offset="50%"  stopColor="#BBF7D0" />
+            <stop offset="100%" stopColor="#1FA055" />
           </linearGradient>
         </defs>
-        {/* Faint upletene niti — vodilja (suptilni duboki emerald track, ostaje tamno) */}
-        <path d={dA} stroke="#15803D" strokeWidth="2.5" strokeLinecap="round" opacity="0.3" />
-        <path d={dB} stroke="#15803D" strokeWidth="2.5" strokeLinecap="round" opacity="0.22" />
+        {/* Faint upletene niti — vodilja (svetli mint track na tamnoj pozadini) */}
+        <path d={dA} stroke="#6EE7A0" strokeWidth="2.5" strokeLinecap="round" opacity="0.22" />
+        <path d={dB} stroke="#A7F3D0" strokeWidth="2.5" strokeLinecap="round" opacity="0.16" />
         {/* Zeleni upleteni lanac — otkriven do glave sidra */}
         <g clipPath="url(#journey-reveal)">
           <path d={dA} stroke="url(#chainMetal)" strokeWidth="2.5" strokeLinecap="round" />
@@ -221,7 +244,7 @@ function JourneyLine({ w, h, progress }: { w: number; h: number; progress: impor
             animate={{ rotate: [-7, 7, -7] }}
             transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut' }}
           >
-            <svg width="23" height="28" viewBox="0 0 100 120" fill="none">
+            <svg width="27" height="32" viewBox="0 0 100 120" fill="none">
               <circle cx="50" cy="11" r="7" stroke="#1FD65F" strokeWidth="6" />
               <line x1="50" y1="18" x2="50" y2="88" stroke="#1FD65F" strokeWidth="6" />
               <path d="M31,29 L69,29" stroke="#1FD65F" strokeWidth="6" fill="none" />
@@ -264,7 +287,7 @@ function StepRow({ step, index, lit }: { step: typeof steps[number]; index: numb
             fontFamily: 'Playfair Display, serif',
             fontSize: '120px',
             fontWeight: 600,
-            color: 'rgba(31, 214, 95,0.07)',
+            color: 'rgba(31, 214, 95,0.10)',
             zIndex: 0,
           }}
         >
@@ -280,22 +303,22 @@ function StepRow({ step, index, lit }: { step: typeof steps[number]; index: numb
               transition={{ duration: 0.5, delay: 0.1, type: 'spring', stiffness: 240, damping: 14 }}
               className="flex-shrink-0 w-14 h-14 rounded-2xl flex items-center justify-center"
               style={{
-                backgroundColor: lit ? '#15803D' : 'rgba(21, 128, 61,0.12)',
-                color: lit ? '#FFFFFF' : '#15803D',
-                boxShadow: lit ? '0 8px 24px rgba(21, 128, 61,0.45)' : '0 0 0 rgba(0,0,0,0)',
+                backgroundColor: lit ? '#1FD65F' : 'rgba(255,255,255,0.08)',
+                color: lit ? '#07130E' : '#54E98A',
+                boxShadow: lit ? '0 8px 24px rgba(31, 214, 95,0.5)' : '0 0 0 rgba(0,0,0,0)',
                 transition: 'background-color 0.45s ease, color 0.45s ease, box-shadow 0.45s ease',
               }}
             >
               <Icon />
             </m.div>
-            <span className="text-xs font-semibold tracking-widest" style={{ color: '#15803D' }}>
+            <span className="text-xs font-semibold tracking-widest" style={{ color: '#54E98A' }}>
               {t('how.step')} {step.number}
             </span>
           </div>
 
           <h3
             className="text-2xl md:text-3xl font-semibold mb-3"
-            style={{ fontFamily: 'Playfair Display, serif', color: '#1A1A1A' }}
+            style={{ fontFamily: 'Playfair Display, serif', color: '#FFFFFF' }}
           >
             <AnimatedWords isInView={inView} delay={0.2} stagger={0.05}>
               {t(`how.steps.${index}.title`)}
@@ -306,7 +329,7 @@ function StepRow({ step, index, lit }: { step: typeof steps[number]; index: numb
             animate={inView ? { opacity: 1 } : {}}
             transition={{ duration: 0.6, delay: 0.5 }}
             className="text-base leading-relaxed max-w-md"
-            style={{ color: '#6B7280' }}
+            style={{ color: 'rgba(255,255,255,0.55)' }}
           >
             {t(`how.steps.${index}.description`)}
           </m.p>
@@ -319,12 +342,12 @@ function StepRow({ step, index, lit }: { step: typeof steps[number]; index: numb
         animate={inView ? { opacity: 1, x: 0, scale: 1 } : {}}
         transition={{ duration: 0.7, delay: 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
         whileHover={{ y: -6 }}
-        className={`relative rounded-3xl border overflow-hidden transition-shadow duration-300 hover:shadow-[0_18px_50px_rgba(31, 214, 95,0.10)] ${reverse ? 'md:order-1' : ''}`}
-        style={{ borderColor: '#E5E7EB', backgroundColor: '#FAFAFA' }}
+        className={`relative rounded-3xl border overflow-hidden backdrop-blur-sm transition-shadow duration-300 hover:shadow-[0_18px_50px_rgba(31, 214, 95,0.18)] ${reverse ? 'md:order-1' : ''}`}
+        style={{ borderColor: 'rgba(255,255,255,0.10)', backgroundColor: 'rgba(255,255,255,0.03)' }}
       >
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 70% 70% at 100% 0%, rgba(31, 214, 95,0.06) 0%, transparent 60%)' }}
+          style={{ background: 'radial-gradient(ellipse 70% 70% at 100% 0%, rgba(31, 214, 95,0.10) 0%, transparent 60%)' }}
         />
         <div className="relative p-8 flex items-center justify-center" style={{ minHeight: 300 }}>
           {/* AnimatePresence + key={cycle} → glatki fade na svaki restart loop-a */}
@@ -351,22 +374,22 @@ function StepRow({ step, index, lit }: { step: typeof steps[number]; index: numb
 function ProfilePreview({ play }: { play: boolean }) {
   const { t } = useTranslation()
   return (
-    <div className="w-full max-w-sm rounded-2xl bg-white border p-6 shadow-sm" style={{ borderColor: '#E5E7EB' }}>
+    <div className="w-full max-w-sm rounded-2xl border p-6" style={{ backgroundColor: 'rgba(255,255,255,0.05)', borderColor: 'rgba(255,255,255,0.10)' }}>
       <div className="flex items-center gap-4 mb-5">
         <m.div
           initial={{ opacity: 0, scale: 0.6 }}
           animate={play ? { opacity: 1, scale: 1 } : {}}
           transition={{ duration: 0.4, ease: 'easeOut' }}
           className="w-14 h-14 rounded-full flex items-center justify-center text-lg font-semibold"
-          style={{ backgroundColor: 'rgba(31, 214, 95,0.12)', color: '#1FD65F', fontFamily: 'Playfair Display, serif' }}
+          style={{ backgroundColor: 'rgba(31, 214, 95,0.16)', color: '#54E98A', fontFamily: 'Playfair Display, serif' }}
         >
           {t('how.profile.you')}
         </m.div>
         <div className="flex-1">
           <m.div initial={{ width: 0 }} animate={play ? { width: '60%' } : {}} transition={{ duration: 0.5, delay: 0.15 }}
-            className="h-3 rounded-full mb-2" style={{ backgroundColor: '#E5E7EB' }} />
+            className="h-3 rounded-full mb-2" style={{ backgroundColor: 'rgba(255,255,255,0.14)' }} />
           <m.div initial={{ width: 0 }} animate={play ? { width: '85%' } : {}} transition={{ duration: 0.5, delay: 0.28 }}
-            className="h-2.5 rounded-full" style={{ backgroundColor: '#F0F0F0' }} />
+            className="h-2.5 rounded-full" style={{ backgroundColor: 'rgba(255,255,255,0.08)' }} />
         </div>
       </div>
       <div className="flex flex-wrap gap-2">
@@ -377,7 +400,7 @@ function ProfilePreview({ play }: { play: boolean }) {
             animate={play ? { opacity: 1, scale: 1, y: 0 } : {}}
             transition={{ delay: 0.45 + i * 0.13, type: 'spring', stiffness: 300, damping: 18 }}
             className="px-3 py-1.5 rounded-full text-xs font-medium"
-            style={{ backgroundColor: 'rgba(31, 214, 95,0.12)', color: '#1FD65F' }}
+            style={{ backgroundColor: 'rgba(255,255,255,0.08)', color: '#54E98A' }}
           >
             {t(`how.profile.traits.${i}`)}
           </m.span>
@@ -420,8 +443,8 @@ function ChatPreview({ play }: { play: boolean }) {
           initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="self-start flex items-center gap-1.5 rounded-2xl rounded-bl-sm px-4 py-3 bg-white border"
-          style={{ borderColor: '#E5E7EB' }}
+          className="self-start flex items-center gap-1.5 rounded-2xl rounded-bl-sm px-4 py-3 border"
+          style={{ backgroundColor: 'rgba(255,255,255,0.06)', borderColor: 'rgba(255,255,255,0.10)' }}
         >
           {[0, 1, 2].map(i => (
             <m.span
@@ -461,7 +484,7 @@ function AdvicePreview({ play }: { play: boolean }) {
       >
         <div
           className="w-7 h-7 rounded-full flex items-center justify-center"
-          style={{ backgroundColor: 'rgba(31, 214, 95,0.12)', color: '#1FD65F' }}
+          style={{ backgroundColor: 'rgba(31, 214, 95,0.16)', color: '#54E98A' }}
         >
           <svg width="14" height="14" viewBox="0 0 100 120" fill="none">
             <circle cx="50" cy="11" r="7" stroke="currentColor" strokeWidth="4" />
@@ -469,11 +492,11 @@ function AdvicePreview({ play }: { play: boolean }) {
             <path d="M22,66 C27,84 39,89 50,89 C61,89 73,84 78,66" stroke="currentColor" strokeWidth="4" fill="none" strokeLinecap="round" />
           </svg>
         </div>
-        <span className="text-xs font-semibold tracking-wide" style={{ color: '#1FD65F' }}>{t('how.advice.name')}</span>
+        <span className="text-xs font-semibold tracking-wide" style={{ color: '#54E98A' }}>{t('how.advice.name')}</span>
       </m.div>
       <div
-        className="rounded-2xl rounded-tl-sm px-5 py-4 bg-white border text-[15px] leading-relaxed"
-        style={{ borderColor: '#E5E7EB', color: '#374151', minHeight: 92 }}
+        className="rounded-2xl rounded-tl-sm px-5 py-4 border text-[15px] leading-relaxed"
+        style={{ backgroundColor: 'rgba(255,255,255,0.05)', borderColor: 'rgba(255,255,255,0.10)', color: 'rgba(255,255,255,0.85)', minHeight: 92 }}
       >
         {typed}
         {play && typed.length < advice.length && <span className="inline-block w-0.5 h-4 ml-0.5 align-middle animate-pulse" style={{ backgroundColor: '#1FD65F' }} />}
