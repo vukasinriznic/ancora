@@ -5,6 +5,8 @@ interface Props {
   type?: 'button' | 'submit'
   variant?: 'primary' | 'secondary'
   icon?: 'anchor' | 'none'
+  onClick?: () => void
+  disabled?: boolean
 }
 
 /* Sidro — identičan oblik kao logo u navbaru (AncoraSVGLogo), nasljeđuje currentColor */
@@ -35,13 +37,17 @@ export default function DiamondButton({
   type = 'button',
   variant = 'secondary',
   icon = 'anchor',
+  onClick,
+  disabled = false,
 }: Props) {
   const variantClass = variant === 'primary' ? 'btn-diamond-primary' : 'btn-diamond-secondary'
 
   return (
     <button
       type={type}
-      className={`group relative overflow-hidden rounded-full cursor-pointer font-medium ${variantClass} ${className}`}
+      onClick={onClick}
+      disabled={disabled}
+      className={`group relative overflow-hidden rounded-full cursor-pointer font-medium disabled:opacity-60 disabled:cursor-not-allowed ${variantClass} ${className}`}
       style={style}
     >
       <span className="diamond-fill" />

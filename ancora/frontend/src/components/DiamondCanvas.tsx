@@ -31,6 +31,17 @@ export interface DiamondCanvasHandle {
   triggerExplosion: (cx: number, cy: number) => void
 }
 
+// 'green' = hero na beloj pozadini (border pulsira ka belom = boji pozadine);
+// 'dark'  = isti zeleni fill, ali border pulsira ka tamno-zelenoj (boji auth pozadine)
+export type DiamondVariant = 'green' | 'dark'
+
+interface DiamondCanvasProps {
+  variant?: DiamondVariant
+  // fill = rombovi pokrivaju CIJELU visinu roditelja (auth). Default (hero):
+  // 150vh canvas, rombovi samo u gornje 2/3 (donja trećina = prostor za eksploziju).
+  fill?: boolean
+}
+
 function createDiamonds(width: number, height: number, cols: number, rows: number): Diamond[] {
   // Stratified sampling: cols×rows grid, jedan oblik po celiji sa random offsetom.
   // Ovo garantuje ravnomjernu pokrivenost cijele hero sekcije bez nasumicnog
@@ -99,6 +110,7 @@ function drawShape(
   time: number,
   shimmerPhase: number,
   shimmerSpeed: number,
+  variant: DiamondVariant,
 ) {
   ctx.save()
   ctx.translate(x, y)
@@ -117,7 +129,7 @@ function drawShape(
   ctx.quadraticCurveTo(-sizeX, 0,    -sizeX * (1 - f), -sizeY * f)
   ctx.closePath()
 
-  // Vertikalni gradient — refleksija svjetla od vrha do dna
+  // Vertikalni gradient — refleksija svjetla od vrha do dna (isti zeleni fill za obje varijante)
   const grad = ctx.createLinearGradient(0, -sizeY, 0, sizeY)
   grad.addColorStop(0,    `rgba(31, 214, 95,  ${opacity * 0.42})`)
   grad.addColorStop(0.22, `rgba(84, 233, 138, ${opacity * 0.95})`)
@@ -126,12 +138,22 @@ function drawShape(
   grad.addColorStop(1,    `rgba(12, 61, 45,   ${opacity * 0.42})`)
   ctx.fillStyle = grad
 
-  // Border koji pulsira sinusom — od tamne zelene do bijelo-zelenog sjaja
+  // Border koji pulsira sinusom
   const shimmer = Math.sin(time * shimmerSpeed + shimmerPhase) * 0.5 + 0.5
-  const rC = Math.round(31  + shimmer * 195)
-  const gC = Math.round(214 + shimmer * 23)
-  const bC = Math.round(95  + shimmer * 135)
-  ctx.strokeStyle = `rgba(${rC}, ${gC}, ${bC}, ${Math.min(opacity * (0.22 + shimmer * 1.5), 1)})`
+  if (variant === 'dark') {
+    // Border pulsira u tonovima tamne pozadine (deep emerald → boja bg-a), bez bijelog
+    // blica. Isti princip kao homepage (border ~ boja pozadine) → suptilno "diše" sa scenom.
+    const rC = Math.round(21  - shimmer * 11)   // 21  → 10
+    const gC = Math.round(110 - shimmer * 68)   // 110 → 42
+    const bC = Math.round(70  - shimmer * 39)   // 70  → 31
+    ctx.strokeStyle = `rgba(${rC}, ${gC}, ${bC}, ${Math.min(opacity * (0.5 + shimmer * 0.5), 1)})`
+  } else {
+    // homepage: od tamne zelene do bijelo-zelenog sjaja (blica ka beloj = boji pozadine)
+    const rC = Math.round(31  + shimmer * 195)
+    const gC = Math.round(214 + shimmer * 23)
+    const bC = Math.round(95  + shimmer * 135)
+    ctx.strokeStyle = `rgba(${rC}, ${gC}, ${bC}, ${Math.min(opacity * (0.22 + shimmer * 1.5), 1)})`
+  }
   ctx.lineWidth   = 0.6 + shimmer * 2.4
 
   ctx.fill()
@@ -139,7 +161,7 @@ function drawShape(
   ctx.restore()
 }
 
-const DiamondCanvas = forwardRef<DiamondCanvasHandle>((_, ref) => {
+const DiamondCanvas = forwardRef<DiamondCanvasHandle, DiamondCanvasProps>(({ variant = 'green', fill = false }, ref) => {
   const canvasRef    = useRef<HTMLCanvasElement>(null)
   const mouseRef     = useRef({ x: -9999, y: -9999 })
   const diamondsRef  = useRef<Diamond[]>([])
@@ -196,8 +218,13 @@ const DiamondCanvas = forwardRef<DiamondCanvasHandle>((_, ref) => {
       // Manje rombova na mobilnom (uže = manje kolona).
       const small = canvas.width < 640
       const cols = small ? 2 : 5
-      const rows = small ? 4 : 3
-      diamondsRef.current = createDiamonds(canvas.width, canvas.height * (2 / 3), cols, rows)
+      // fill: pokrij cijelu visinu, broj redova skaliran po visini (≈1 red / 200px).
+      // default (hero): rombovi u gornje 2/3, fiksan broj redova.
+      const area = fill ? canvas.height : canvas.height * (2 / 3)
+      const rows = fill
+        ? Math.max(small ? 4 : 3, Math.round(area / 200))
+        : (small ? 4 : 3)
+      diamondsRef.current = createDiamonds(canvas.width, area, cols, rows)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -239,6 +266,7 @@ const DiamondCanvas = forwardRef<DiamondCanvasHandle>((_, ref) => {
             d.sizeX, d.sizeY,
             d.rotation, d.opacity * eased,         // fade-in
             time, d.shimmerPhase, d.shimmerSpeed,
+            variant,
           )
           continue
         }
@@ -268,6 +296,7 @@ const DiamondCanvas = forwardRef<DiamondCanvasHandle>((_, ref) => {
           d.sizeX, d.sizeY,
           d.rotation, d.opacity,
           time, d.shimmerPhase, d.shimmerSpeed,
+          variant,
         )
       }
 
@@ -280,12 +309,12 @@ const DiamondCanvas = forwardRef<DiamondCanvasHandle>((_, ref) => {
       window.removeEventListener('mousemove', onMouseMove)
       cancelAnimationFrame(rafRef.current)
     }
-  }, [])
+  }, [variant, fill])
 
   return (
     <canvas
       ref={canvasRef}
-      style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '150vh', pointerEvents: 'none' }}
+      style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: fill ? '100%' : '150vh', pointerEvents: 'none' }}
     />
   )
 })

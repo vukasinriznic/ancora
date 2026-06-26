@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
 import { m } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import AncoraSVGLogo from './AncoraSVGLogo'
 import DiamondButton from './DiamondButton'
 
 export default function Navbar() {
   const { t: tr, i18n } = useTranslation()
+  const navigate = useNavigate()
   const cur = i18n.language?.startsWith('sr') ? 'sr' : 'en'
   const setLang = (lng: 'en' | 'sr') => {
     i18n.changeLanguage(lng)
@@ -57,7 +59,7 @@ export default function Navbar() {
       <div className="max-w-6xl mx-auto px-5 sm:px-8 py-5 flex items-center justify-between">
 
         {/* ── Logo ── */}
-        <div className="flex items-center gap-3 cursor-pointer select-none">
+        <div onClick={() => navigate('/')} className="flex items-center gap-3 cursor-pointer select-none">
           <AncoraSVGLogo size={40} color="#1FD65F" />
           <span
             className="text-lg sm:text-xl font-semibold tracking-tight transition-colors duration-300"
@@ -92,6 +94,7 @@ export default function Navbar() {
 
           {/* Log in — sakriven na vrlo uskim ekranima (Get started pokriva CTA) */}
           <button
+            onClick={() => navigate('/login')}
             className="hidden sm:block text-sm font-medium transition-colors duration-300 cursor-pointer"
             style={{ color: isDark ? '#9CA3AF' : '#4B5563' }}
             onMouseEnter={e => (e.currentTarget.style.color = isDark ? '#FFFFFF' : '#1A1A1A')}
@@ -100,7 +103,7 @@ export default function Navbar() {
             {tr('nav.login')}
           </button>
 
-          <DiamondButton className="px-4 py-2 text-xs sm:px-6 sm:py-2.5 sm:text-sm">{tr('nav.getStarted')}</DiamondButton>
+          <DiamondButton onClick={() => navigate('/register')} className="px-4 py-2 text-xs sm:px-6 sm:py-2.5 sm:text-sm">{tr('nav.getStarted')}</DiamondButton>
         </div>
 
       </div>

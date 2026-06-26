@@ -3,6 +3,42 @@ import { initReactI18next } from 'react-i18next'
 
 const en = {
   nav: { login: 'Log in', getStarted: 'Get started' },
+  auth: {
+    login: {
+      title: 'Welcome back',
+      subtitle: 'Log in to continue your conversations.',
+      submit: 'Log in',
+      noAccount: "Don't have an account?",
+      signUp: 'Sign up',
+    },
+    register: {
+      title: 'Create your account',
+      subtitle: 'A few details so Ancora understands you from the very start.',
+      submit: 'Create account',
+      haveAccount: 'Already have an account?',
+      logIn: 'Log in',
+    },
+    fields: {
+      firstName: 'First name',
+      lastName: 'Last name',
+      email: 'Email',
+      password: 'Password',
+      description: 'About you',
+      descriptionPlaceholder: 'Tell Ancora who you are - your values, what matters to you, how you tend to handle things.',
+    },
+    errors: {
+      required: 'This field is required',
+      email: 'Please enter a valid email',
+      passwordMin: 'Password must be at least 8 characters',
+      descriptionMin: 'Please write at least {{min}} characters',
+    },
+    loading: 'Please wait…',
+  },
+  notFound: {
+    title: 'Lost at sea',
+    message: "This page drifted away — the link may be broken or the page no longer exists.",
+    home: 'Back to safe harbour',
+  },
   hero: {
     titleLine1: 'Clarity in every',
     titleWord: 'connection',
@@ -70,6 +106,42 @@ const en = {
 
 const sr: typeof en = {
   nav: { login: 'Prijava', getStarted: 'Započni' },
+  auth: {
+    login: {
+      title: 'Dobro došao nazad',
+      subtitle: 'Prijavi se da nastaviš svoje razgovore.',
+      submit: 'Prijavi se',
+      noAccount: 'Nemaš nalog?',
+      signUp: 'Registruj se',
+    },
+    register: {
+      title: 'Napravi nalog',
+      subtitle: 'Nekoliko detalja da te Ancora razume od samog početka.',
+      submit: 'Napravi nalog',
+      haveAccount: 'Već imaš nalog?',
+      logIn: 'Prijavi se',
+    },
+    fields: {
+      firstName: 'Ime',
+      lastName: 'Prezime',
+      email: 'Email',
+      password: 'Lozinka',
+      description: 'O tebi',
+      descriptionPlaceholder: 'Reci Ancori ko si - tvoje vrednosti, šta ti je važno, kako obično rešavaš stvari.',
+    },
+    errors: {
+      required: 'Ovo polje je obavezno',
+      email: 'Unesi ispravan email',
+      passwordMin: 'Lozinka mora imati bar 8 karaktera',
+      descriptionMin: 'Napiši bar {{min}} karaktera',
+    },
+    loading: 'Sačekaj…',
+  },
+  notFound: {
+    title: 'Izgubljen na pučini',
+    message: 'Ova stranica je odplutala — link je možda pokvaren ili stranica više ne postoji.',
+    home: 'Nazad u sigurnu luku',
+  },
   hero: {
     titleLine1: 'Jasnoća u svakoj',
     titleWord: 'vezi',

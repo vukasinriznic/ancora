@@ -14,6 +14,8 @@ interface Particle {
   baseOpacity: number
 }
 
+export type TrailVariant = 'green' | 'white'
+
 // Isti zaobljeni rombus kao DiamondCanvas (quadratic bezier, f=0.3)
 function drawMiniCrystal(
   ctx: CanvasRenderingContext2D,
@@ -23,6 +25,7 @@ function drawMiniCrystal(
   sy: number,
   rotation: number,
   opacity: number,
+  variant: TrailVariant,
 ) {
   ctx.save()
   ctx.translate(x, y)
@@ -41,11 +44,19 @@ function drawMiniCrystal(
   ctx.closePath()
 
   const grad = ctx.createLinearGradient(0, -sy, 0, sy)
-  grad.addColorStop(0,    `rgba(84, 233, 138, ${opacity * 0.85})`)
-  grad.addColorStop(0.45, `rgba(31, 214, 95,  ${opacity})`)
-  grad.addColorStop(1,    `rgba(20, 184, 84,  ${opacity * 0.55})`)
-  ctx.fillStyle   = grad
-  ctx.strokeStyle = `rgba(134, 239, 172, ${opacity * 0.7})`
+  if (variant === 'white') {
+    grad.addColorStop(0,    `rgba(255, 255, 255, ${opacity * 0.9})`)
+    grad.addColorStop(0.45, `rgba(255, 255, 255, ${opacity * 0.7})`)
+    grad.addColorStop(1,    `rgba(255, 255, 255, ${opacity * 0.45})`)
+    ctx.fillStyle   = grad
+    ctx.strokeStyle = `rgba(255, 255, 255, ${opacity * 0.8})`
+  } else {
+    grad.addColorStop(0,    `rgba(84, 233, 138, ${opacity * 0.85})`)
+    grad.addColorStop(0.45, `rgba(31, 214, 95,  ${opacity})`)
+    grad.addColorStop(1,    `rgba(20, 184, 84,  ${opacity * 0.55})`)
+    ctx.fillStyle   = grad
+    ctx.strokeStyle = `rgba(134, 239, 172, ${opacity * 0.7})`
+  }
   ctx.lineWidth   = 0.5
 
   ctx.fill()
@@ -53,7 +64,7 @@ function drawMiniCrystal(
   ctx.restore()
 }
 
-export default function CursorTrail() {
+export default function CursorTrail({ variant = 'green' }: { variant?: TrailVariant }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
@@ -105,7 +116,7 @@ export default function CursorTrail() {
 
         // ease-out: kvadratni pad na kraju zivota
         const opacity = p.baseOpacity * p.life * p.life
-        drawMiniCrystal(ctx, p.x, p.y, p.sizeX, p.sizeY, p.rotation, opacity)
+        drawMiniCrystal(ctx, p.x, p.y, p.sizeX, p.sizeY, p.rotation, opacity, variant)
       }
 
       rafId = requestAnimationFrame(loop)
@@ -129,7 +140,7 @@ export default function CursorTrail() {
       window.removeEventListener('mousemove', onMouseMove)
       cancelAnimationFrame(rafId)
     }
-  }, [])
+  }, [variant])
 
   return (
     <canvas

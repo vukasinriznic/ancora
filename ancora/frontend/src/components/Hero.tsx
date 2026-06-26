@@ -1,11 +1,13 @@
 import { useRef, useEffect } from 'react'
 import { m } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import DiamondCanvas, { type DiamondCanvasHandle } from './DiamondCanvas'
 import DiamondButton from './DiamondButton'
 
 export default function Hero() {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const subtitleWords = t('hero.subtitle').split(' ')
 
   const sectionRef = useRef<HTMLElement>(null)
@@ -116,7 +118,7 @@ export default function Hero() {
           transition={{ duration: 0.6, delay: 1.4 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
         >
-          <DiamondButton variant="primary" className="px-9 py-4 text-base">{t('hero.startFree')}</DiamondButton>
+          <DiamondButton variant="primary" onClick={() => navigate('/register')} className="px-9 py-4 text-base">{t('hero.startFree')}</DiamondButton>
           <DiamondButton variant="secondary" className="px-9 py-4 text-base">{t('hero.learnMore')}</DiamondButton>
         </m.div>
       </div>
