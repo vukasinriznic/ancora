@@ -5,16 +5,21 @@ import { useTranslation } from 'react-i18next'
 import AuthCard from '../components/AuthCard'
 import AuthField from '../components/AuthField'
 import DiamondButton from '../components/DiamondButton'
+import FormError from '../components/FormError'
+import { useAuth } from '../context/AuthContext'
+import { ApiError } from '../lib/api'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export default function Login() {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const { login } = useAuth()
 
   const [email, setEmail]       = useState('')
   const [password, setPassword] = useState('')
   const [errors, setErrors]     = useState<{ email?: string; password?: string }>({})
+  const [formError, setFormError] = useState<string | null>(null)
   const [loading, setLoading]   = useState(false)
 
   const validate = () => {
@@ -28,12 +33,17 @@ export default function Login() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setFormError(null)
     if (!validate()) return
     setLoading(true)
     try {
-      // TODO: povezati sa POST /auth/login kada backend bude gotov
-      await new Promise(r => setTimeout(r, 700))
+      await login(email, password)
       navigate('/')
+    } catch (err) {
+      if (err instanceof ApiError && err.status === 401) setFormError(t('auth.errors.invalidCredentials'))
+      else if (err instanceof ApiError && err.status === 403) setFormError(t('auth.errors.notVerified'))
+      else if (err instanceof ApiError && err.status === 0) setFormError(t('auth.errors.network'))
+      else setFormError(t('auth.errors.generic'))
     } finally {
       setLoading(false)
     }
@@ -73,6 +83,8 @@ export default function Login() {
           autoComplete="current-password"
           index={1}
         />
+
+        <FormError message={formError} />
 
         <m.div
           initial={{ opacity: 0, y: 12 }}

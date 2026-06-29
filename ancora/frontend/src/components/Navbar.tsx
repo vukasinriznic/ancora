@@ -4,10 +4,12 @@ import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import AncoraSVGLogo from './AncoraSVGLogo'
 import DiamondButton from './DiamondButton'
+import { useAuth } from '../context/AuthContext'
 
 export default function Navbar() {
   const { t: tr, i18n } = useTranslation()
   const navigate = useNavigate()
+  const { user, logout } = useAuth()
   const cur = i18n.language?.startsWith('sr') ? 'sr' : 'en'
   const setLang = (lng: 'en' | 'sr') => {
     i18n.changeLanguage(lng)
@@ -92,18 +94,33 @@ export default function Navbar() {
             >SR</button>
           </div>
 
-          {/* Log in — sakriven na vrlo uskim ekranima (Get started pokriva CTA) */}
-          <button
-            onClick={() => navigate('/login')}
-            className="hidden sm:block text-sm font-medium transition-colors duration-300 cursor-pointer"
-            style={{ color: isDark ? '#9CA3AF' : '#4B5563' }}
-            onMouseEnter={e => (e.currentTarget.style.color = isDark ? '#FFFFFF' : '#1A1A1A')}
-            onMouseLeave={e => (e.currentTarget.style.color = isDark ? '#9CA3AF' : '#4B5563')}
-          >
-            {tr('nav.login')}
-          </button>
+          {user ? (
+            <>
+              {/* Pozdrav imenom — sakriven na vrlo uskim ekranima */}
+              <span
+                className="hidden sm:block text-sm font-medium transition-colors duration-300"
+                style={{ color: isDark ? '#FFFFFF' : '#1A1A1A' }}
+              >
+                {user.firstName}
+              </span>
+              <DiamondButton onClick={logout} className="px-4 py-2 text-xs sm:px-6 sm:py-2.5 sm:text-sm">{tr('nav.logout')}</DiamondButton>
+            </>
+          ) : (
+            <>
+              {/* Log in — sakriven na vrlo uskim ekranima (Get started pokriva CTA) */}
+              <button
+                onClick={() => navigate('/login')}
+                className="hidden sm:block text-sm font-medium transition-colors duration-300 cursor-pointer"
+                style={{ color: isDark ? '#9CA3AF' : '#4B5563' }}
+                onMouseEnter={e => (e.currentTarget.style.color = isDark ? '#FFFFFF' : '#1A1A1A')}
+                onMouseLeave={e => (e.currentTarget.style.color = isDark ? '#9CA3AF' : '#4B5563')}
+              >
+                {tr('nav.login')}
+              </button>
 
-          <DiamondButton onClick={() => navigate('/register')} className="px-4 py-2 text-xs sm:px-6 sm:py-2.5 sm:text-sm">{tr('nav.getStarted')}</DiamondButton>
+              <DiamondButton onClick={() => navigate('/register')} className="px-4 py-2 text-xs sm:px-6 sm:py-2.5 sm:text-sm">{tr('nav.getStarted')}</DiamondButton>
+            </>
+          )}
         </div>
 
       </div>

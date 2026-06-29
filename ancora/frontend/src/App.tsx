@@ -5,6 +5,7 @@ import Home from './pages/Home'
 import AuthShell from './components/AuthShell'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import Verify from './pages/Verify'
 import NotFound from './pages/NotFound'
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
         <Route element={<AuthShell />}>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/verify" element={<Verify />} />
         </Route>
         {/* Catch-all → 404 u istom stilu */}
         <Route path="*" element={<NotFound />} />

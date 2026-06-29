@@ -2,7 +2,7 @@ import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 
 const en = {
-  nav: { login: 'Log in', getStarted: 'Get started' },
+  nav: { login: 'Log in', getStarted: 'Get started', logout: 'Log out' },
   auth: {
     login: {
       title: 'Welcome back',
@@ -18,6 +18,22 @@ const en = {
       haveAccount: 'Already have an account?',
       logIn: 'Log in',
     },
+    checkEmail: {
+      title: 'Check your inbox',
+      text: 'We sent a confirmation link to {{email}}. Click it to activate your account.',
+      hint: "Didn't get it? Check spam, or resend below.",
+      resend: 'Resend email',
+      resent: 'Email sent again ✓',
+    },
+    verify: {
+      verifying: 'Confirming your email…',
+      successTitle: 'Email confirmed',
+      successText: "You're all set — taking you in…",
+      failedTitle: 'Link invalid or expired',
+      failedText: 'This confirmation link is no longer valid. Try registering again or resend the email.',
+      toLogin: 'Go to log in',
+      toRegister: 'Back to register',
+    },
     fields: {
       firstName: 'First name',
       lastName: 'Last name',
@@ -31,6 +47,11 @@ const en = {
       email: 'Please enter a valid email',
       passwordMin: 'Password must be at least 8 characters',
       descriptionMin: 'Please write at least {{min}} characters',
+      invalidCredentials: 'Invalid email or password',
+      emailTaken: 'An account with this email already exists',
+      notVerified: 'Please confirm your email first — check your inbox.',
+      network: 'Cannot reach the server. Please try again.',
+      generic: 'Something went wrong. Please try again.',
     },
     loading: 'Please wait…',
   },
@@ -105,7 +126,7 @@ const en = {
 }
 
 const sr: typeof en = {
-  nav: { login: 'Prijava', getStarted: 'Započni' },
+  nav: { login: 'Prijava', getStarted: 'Započni', logout: 'Odjavi se' },
   auth: {
     login: {
       title: 'Dobro došao nazad',
@@ -121,6 +142,22 @@ const sr: typeof en = {
       haveAccount: 'Već imaš nalog?',
       logIn: 'Prijavi se',
     },
+    checkEmail: {
+      title: 'Proveri svoju poštu',
+      text: 'Poslali smo link za potvrdu na {{email}}. Klikni ga da aktiviraš nalog.',
+      hint: 'Nije stiglo? Proveri spam ili pošalji ponovo ispod.',
+      resend: 'Pošalji ponovo',
+      resent: 'Email ponovo poslat ✓',
+    },
+    verify: {
+      verifying: 'Potvrđujemo tvoj email…',
+      successTitle: 'Email potvrđen',
+      successText: 'Sve je spremno — uvodimo te…',
+      failedTitle: 'Link nevažeći ili istekao',
+      failedText: 'Ovaj link za potvrdu više ne važi. Pokušaj ponovnu registraciju ili pošalji email iznova.',
+      toLogin: 'Idi na prijavu',
+      toRegister: 'Nazad na registraciju',
+    },
     fields: {
       firstName: 'Ime',
       lastName: 'Prezime',
@@ -134,6 +171,11 @@ const sr: typeof en = {
       email: 'Unesi ispravan email',
       passwordMin: 'Lozinka mora imati bar 8 karaktera',
       descriptionMin: 'Napiši bar {{min}} karaktera',
+      invalidCredentials: 'Pogrešan email ili lozinka',
+      emailTaken: 'Nalog sa ovim emailom već postoji',
+      notVerified: 'Prvo potvrdi svoj email — proveri poštu.',
+      network: 'Server nije dostupan. Pokušaj ponovo.',
+      generic: 'Nešto je pošlo po zlu. Pokušaj ponovo.',
     },
     loading: 'Sačekaj…',
   },
