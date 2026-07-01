@@ -66,6 +66,13 @@ const en = {
     subtitle: 'Describe your situation and get wise, dignified advice that helps you navigate relationships with honesty and compassion.',
     startFree: 'Start for free',
     learnMore: 'Learn more',
+    letsChat: 'Talk it through',
+  },
+  chat: {
+    soonEyebrow: 'In the works',
+    soonTitle: 'Almost here',
+    soonText: "We're crafting your space for thoughtful, private conversations with Ancora. It'll be worth the wait.",
+    back: 'Back to home',
   },
   how: {
     title: 'How it works',
@@ -190,6 +197,13 @@ const sr: typeof en = {
     subtitle: 'Opišite svoju situaciju i dobijte mudar, dostojanstven savet koji vam pomaže da kroz odnose prolazite sa iskrenošću i saosećanjem.',
     startFree: 'Započni besplatno',
     learnMore: 'Saznaj više',
+    letsChat: 'Hajde da popričamo',
+  },
+  chat: {
+    soonEyebrow: 'U izradi',
+    soonTitle: 'Samo što nije',
+    soonText: 'Pripremamo tvoj prostor za promišljene, privatne razgovore sa Ancorom. Vredeće čekanja.',
+    back: 'Nazad na početnu',
   },
   how: {
     title: 'Kako funkcioniše',

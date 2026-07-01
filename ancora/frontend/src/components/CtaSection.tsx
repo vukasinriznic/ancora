@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import AnimatedWords from './AnimatedWords'
 import DiamondButton from './DiamondButton'
+import { useAuth } from '../context/AuthContext'
 
 // quote/name dolaze iz i18n po indeksu; ovdje samo godine + foto
 const testimonials = [
@@ -82,6 +83,7 @@ const CHAINS = [
 export default function CtaSection() {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const { user } = useAuth()
   const cRef    = useRef(null)
   const cInView = useInView(cRef, { once: true, margin: '-100px' })
 
@@ -271,7 +273,7 @@ export default function CtaSection() {
               className="absolute inset-0 -z-10 pointer-events-none"
               style={{ background: 'radial-gradient(ellipse 90% 160% at 50% 50%, rgba(31, 214, 95,0.5) 0%, transparent 70%)', filter: 'blur(26px)' }}
             />
-            <DiamondButton variant="primary" onClick={() => navigate('/register')} className="px-12 py-4 text-base">{t('cta.button')}</DiamondButton>
+            <DiamondButton variant="primary" onClick={() => navigate(user ? '/chat' : '/register')} className="px-12 py-4 text-base">{user ? t('hero.letsChat') : t('cta.button')}</DiamondButton>
           </m.div>
 
           <m.div

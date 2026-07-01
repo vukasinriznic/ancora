@@ -4,11 +4,22 @@ import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import DiamondCanvas, { type DiamondCanvasHandle } from './DiamondCanvas'
 import DiamondButton from './DiamondButton'
+import { useAuth } from '../context/AuthContext'
 
 export default function Hero() {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const { user } = useAuth()
   const subtitleWords = t('hero.subtitle').split(' ')
+
+  // "Learn more" → glatki scroll do "How it works" (sadržaj koji objašnjava app)
+  const scrollToHow = () => {
+    const el = document.getElementById('how-it-works')
+    if (el) {
+      const top = el.getBoundingClientRect().top + window.scrollY - 72
+      window.scrollTo({ top, behavior: 'smooth' })
+    }
+  }
 
   const sectionRef = useRef<HTMLElement>(null)
   const tiltRef    = useRef<HTMLDivElement>(null)
@@ -118,8 +129,14 @@ export default function Hero() {
           transition={{ duration: 0.6, delay: 1.4 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
         >
-          <DiamondButton variant="primary" onClick={() => navigate('/register')} className="px-9 py-4 text-base">{t('hero.startFree')}</DiamondButton>
-          <DiamondButton variant="secondary" className="px-9 py-4 text-base">{t('hero.learnMore')}</DiamondButton>
+          <DiamondButton
+            variant="primary"
+            onClick={() => navigate(user ? '/chat' : '/register')}
+            className="px-9 py-4 text-base"
+          >
+            {user ? t('hero.letsChat') : t('hero.startFree')}
+          </DiamondButton>
+          <DiamondButton variant="secondary" onClick={scrollToHow} className="px-9 py-4 text-base">{t('hero.learnMore')}</DiamondButton>
         </m.div>
       </div>
 

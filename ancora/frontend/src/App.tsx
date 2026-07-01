@@ -6,6 +6,7 @@ import AuthShell from './components/AuthShell'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Verify from './pages/Verify'
+import Chat from './pages/Chat'
 import NotFound from './pages/NotFound'
 
 function App() {
@@ -20,6 +21,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+        {/* Privremena "uskoro" stranica dok ne dodamo Claude API */}
+        <Route path="/chat" element={<Chat />} />
         {/* Nested layout: AuthShell ostaje mirno mounted, kartice se animiraju */}
         <Route element={<AuthShell />}>
           <Route path="/login" element={<Login />} />
