@@ -241,6 +241,11 @@ const DiamondCanvas = forwardRef<DiamondCanvasHandle, DiamondCanvasProps>(({ var
     const DAMPING          = 0.88
     const INTRO_DUR        = 1.3    // sekundi po obliku za ulijetanje
 
+    // Pauza kad je canvas van ekrana → petlja ne troši CPU dok skroluješ ispod hero-a.
+    // pauseStart kompenzuje startTime pri nastavku → drift/shimmer bez skoka.
+    let paused = false
+    let pauseStart = 0
+
     const loop = () => {
       const time = (Date.now() - startTimeRef.current) / 1000
       ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -300,13 +305,29 @@ const DiamondCanvas = forwardRef<DiamondCanvasHandle, DiamondCanvasProps>(({ var
         )
       }
 
-      rafRef.current = requestAnimationFrame(loop)
+      if (!paused) rafRef.current = requestAnimationFrame(loop)
     }
     rafRef.current = requestAnimationFrame(loop)
+
+    // Pauziraj/nastavi na osnovu vidljivosti canvasa
+    const io = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        if (paused) {
+          paused = false
+          startTimeRef.current += Date.now() - pauseStart   // kompenzuj proteklo vreme
+          rafRef.current = requestAnimationFrame(loop)
+        }
+      } else if (!paused) {
+        paused = true
+        pauseStart = Date.now()
+      }
+    }, { threshold: 0 })
+    io.observe(canvas)
 
     return () => {
       window.removeEventListener('resize', resize)
       window.removeEventListener('mousemove', onMouseMove)
+      io.disconnect()
       cancelAnimationFrame(rafRef.current)
     }
   }, [variant, fill])

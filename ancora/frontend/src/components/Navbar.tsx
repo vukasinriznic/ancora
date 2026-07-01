@@ -20,25 +20,30 @@ export default function Navbar() {
   const [isDark, setIsDark] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => setT(Math.min(window.scrollY / 80, 1))
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
-  useEffect(() => {
     const NAV_H = 72
-    const check = () => {
-      const sections = document.querySelectorAll('[data-theme="dark"]')
+    let ticking = false
+    // Jedan rAF-throttlovan handler za oboje (progres + dark detekcija).
+    // Sav rad se izvrši najviše jednom po frame-u → nema reflow-a po svakom scroll eventu.
+    const update = () => {
+      ticking = false
+      setT(Math.min(window.scrollY / 80, 1))
       let over = false
-      sections.forEach(el => {
+      document.querySelectorAll('[data-theme="dark"]').forEach(el => {
         const r = el.getBoundingClientRect()
         if (r.top < NAV_H && r.bottom > 0) over = true
       })
       setIsDark(over)
     }
-    check()
-    window.addEventListener('scroll', check, { passive: true })
-    return () => window.removeEventListener('scroll', check)
+    const onScroll = () => {
+      if (!ticking) { ticking = true; requestAnimationFrame(update) }
+    }
+    update()  // inicijalno stanje
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+    }
   }, [])
 
   return (
