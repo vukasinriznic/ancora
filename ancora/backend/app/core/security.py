@@ -35,6 +35,10 @@ def create_verification_token(subject: str) -> str:
     return _create_token(subject, "verify", settings.VERIFY_TOKEN_EXPIRE_MINUTES)
 
 
+def create_reset_token(subject: str) -> str:
+    return _create_token(subject, "reset", settings.RESET_TOKEN_EXPIRE_MINUTES)
+
+
 def decode_token(token: str, expected_purpose: str) -> str | None:
     """Vrati subject (user id) ako je token validan i ima očekivani purpose, inače None."""
     try:

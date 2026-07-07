@@ -31,6 +31,26 @@ class ResendRequest(CamelModel):
     email: EmailStr
 
 
+class ForgotPasswordRequest(CamelModel):
+    email: EmailStr
+
+
+class ResetPasswordRequest(CamelModel):
+    token: str
+    password: str = Field(min_length=8)
+
+
+class ProfileUpdate(CamelModel):
+    first_name: str | None = Field(default=None, min_length=1, max_length=80)
+    last_name: str | None = Field(default=None, min_length=1, max_length=80)
+    description: str | None = Field(default=None, min_length=DESCRIPTION_MIN)
+
+
+class ChangePasswordRequest(CamelModel):
+    current_password: str
+    new_password: str = Field(min_length=8)
+
+
 class UserOut(CamelModel):
     id: str
     first_name: str

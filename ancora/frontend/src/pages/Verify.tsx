@@ -4,11 +4,13 @@ import { useTranslation } from 'react-i18next'
 import AuthCard from '../components/AuthCard'
 import DiamondButton from '../components/DiamondButton'
 import { useAuth } from '../context/AuthContext'
+import { usePageTitle } from '../hooks/usePageTitle'
 
 type State = 'verifying' | 'success' | 'failed'
 
 export default function Verify() {
   const { t } = useTranslation()
+  usePageTitle(t('pageTitles.verify'))
   const navigate = useNavigate()
   const { verify } = useAuth()
   const [params] = useSearchParams()

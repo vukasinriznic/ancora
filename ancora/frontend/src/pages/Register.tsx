@@ -9,6 +9,7 @@ import FormError from '../components/FormError'
 import CheckEmailPanel from '../components/CheckEmailPanel'
 import { useAuth } from '../context/AuthContext'
 import { ApiError } from '../lib/api'
+import { usePageTitle } from '../hooks/usePageTitle'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const DESC_MIN = 40
@@ -17,6 +18,7 @@ type Fields = 'firstName' | 'lastName' | 'email' | 'password' | 'description'
 
 export default function Register() {
   const { t } = useTranslation()
+  usePageTitle(t('pageTitles.register'))
   const { register } = useAuth()
 
   const [values, setValues] = useState<Record<Fields, string>>({

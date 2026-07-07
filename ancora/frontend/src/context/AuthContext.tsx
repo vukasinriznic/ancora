@@ -8,6 +8,7 @@ interface AuthContextValue {
   // register vraća email na koji je poslata potvrda (NE loguje korisnika)
   register: (payload: RegisterPayload) => Promise<string>
   verify: (token: string) => Promise<void>
+  updateUser: (user: User) => void   // osveži user posle profil update-a
   logout: () => void
 }
 
@@ -47,13 +48,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(res.user)
   }
 
+  const updateUser = (next: User) => setUser(next)
+
   const logout = () => {
     setToken(null)
     setUser(null)
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, verify, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, register, verify, updateUser, logout }}>
       {children}
     </AuthContext.Provider>
   )

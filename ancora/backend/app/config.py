@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7    # 7 dana
     VERIFY_TOKEN_EXPIRE_MINUTES: int = 60 * 24        # 24h za potvrdu emaila
+    RESET_TOKEN_EXPIRE_MINUTES: int = 60              # 1h za reset lozinke
     CORS_ORIGINS: str = "http://localhost:5173,http://127.0.0.1:5173"
 
     # URL frontenda — za link u verifikacionom emailu
@@ -21,6 +22,10 @@ class Settings(BaseSettings):
     SMTP_USER: str = ""
     SMTP_PASSWORD: str = ""
     EMAIL_FROM: str = "Ancora <no-reply@ancora.app>"
+
+    # Google Gemini (besplatan tier). Ako prazno → mock AI odgovori (bez API poziva).
+    GOOGLE_API_KEY: str = ""
+    GOOGLE_MODEL: str = "gemini-2.5-flash"
 
     @property
     def cors_origins(self) -> list[str]:

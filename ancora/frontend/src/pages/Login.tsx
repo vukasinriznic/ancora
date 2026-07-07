@@ -8,11 +8,13 @@ import DiamondButton from '../components/DiamondButton'
 import FormError from '../components/FormError'
 import { useAuth } from '../context/AuthContext'
 import { ApiError } from '../lib/api'
+import { usePageTitle } from '../hooks/usePageTitle'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export default function Login() {
   const { t } = useTranslation()
+  usePageTitle(t('pageTitles.login'))
   const navigate = useNavigate()
   const { login } = useAuth()
 
@@ -83,6 +85,12 @@ export default function Login() {
           autoComplete="current-password"
           index={1}
         />
+
+        <div className="-mt-2 mb-1 text-right">
+          <Link to="/forgot-password" className="text-sm font-medium" style={{ color: '#54E98A' }}>
+            {t('auth.login.forgot')}
+          </Link>
+        </div>
 
         <FormError message={formError} />
 

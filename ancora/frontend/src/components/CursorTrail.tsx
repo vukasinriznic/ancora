@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion'
 
 interface Particle {
   x: number
@@ -66,8 +67,10 @@ function drawMiniCrystal(
 
 export default function CursorTrail({ variant = 'green' }: { variant?: TrailVariant }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const reduced = usePrefersReducedMotion()
 
   useEffect(() => {
+    if (reduced) return
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
@@ -140,7 +143,9 @@ export default function CursorTrail({ variant = 'green' }: { variant?: TrailVari
       window.removeEventListener('mousemove', onMouseMove)
       cancelAnimationFrame(rafId)
     }
-  }, [variant])
+  }, [variant, reduced])
+
+  if (reduced) return null
 
   return (
     <canvas

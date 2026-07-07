@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion'
 
 /*
   Meka zelena aureola koja prati kursor kroz cijeli sajt.
@@ -8,8 +9,10 @@ import { useEffect, useRef } from 'react'
 */
 export default function CursorGlow() {
   const ref = useRef<HTMLDivElement>(null)
+  const reduced = usePrefersReducedMotion()
 
   useEffect(() => {
+    if (reduced) return
     const el = ref.current
     if (!el) return
 
@@ -35,7 +38,9 @@ export default function CursorGlow() {
       window.removeEventListener('mousemove', onMove)
       cancelAnimationFrame(raf)
     }
-  }, [])
+  }, [reduced])
+
+  if (reduced) return null
 
   return (
     <div

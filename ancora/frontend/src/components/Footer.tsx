@@ -1,4 +1,5 @@
 import type { MouseEvent } from 'react'
+import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import AncoraSVGLogo from './AncoraSVGLogo'
 
@@ -8,31 +9,37 @@ const explore = [
   { key: 'about', href: '#about' },
 ]
 const legal = [
-  { key: 'privacy', href: '#' },
-  { key: 'terms',   href: '#' },
+  { key: 'privacy', href: '/privacy' },
+  { key: 'terms',   href: '/terms' },
 ]
 
 function FooterLink({ label, href }: { label: string; href: string }) {
-  // Smooth scroll do sekcije (offset za fiksirani navbar); placeholder "#" ostaje default
+  const linkStyle = {
+    color: '#9CA3AF',
+    transition: 'color 0.2s ease',
+  } as const
+  const onEnter = (e: MouseEvent<HTMLElement>) => (e.currentTarget.style.color = '#1FD65F')
+  const onLeave = (e: MouseEvent<HTMLElement>) => (e.currentTarget.style.color = '#9CA3AF')
+
+  // Prave rute (npr. /privacy) → SPA navigacija; "#anchor" → smooth scroll na istoj stranici
+  if (!href.startsWith('#')) {
+    return (
+      <Link to={href} className="inline-block text-sm" style={linkStyle} onMouseEnter={onEnter} onMouseLeave={onLeave}>
+        {label}
+      </Link>
+    )
+  }
+
   const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
-    if (href.length > 1 && href.startsWith('#')) {
-      const el = document.querySelector(href)
-      if (el) {
-        e.preventDefault()
-        const top = el.getBoundingClientRect().top + window.scrollY - 72
-        window.scrollTo({ top, behavior: 'smooth' })
-      }
+    const el = document.querySelector(href)
+    if (el) {
+      e.preventDefault()
+      const top = el.getBoundingClientRect().top + window.scrollY - 72
+      window.scrollTo({ top, behavior: 'smooth' })
     }
   }
   return (
-    <a
-      href={href}
-      onClick={handleClick}
-      className="inline-block text-sm"
-      style={{ color: '#9CA3AF', transition: 'color 0.2s ease' }}
-      onMouseEnter={e => (e.currentTarget.style.color = '#1FD65F')}
-      onMouseLeave={e => (e.currentTarget.style.color = '#9CA3AF')}
-    >
+    <a href={href} onClick={handleClick} className="inline-block text-sm" style={linkStyle} onMouseEnter={onEnter} onMouseLeave={onLeave}>
       {label}
     </a>
   )

@@ -2,6 +2,7 @@ import { m } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import DiamondButton from '../components/DiamondButton'
+import { usePageTitle } from '../hooks/usePageTitle'
 
 /*
   404 — u istom tamno-zelenom stilu kao auth stranice.
@@ -9,6 +10,7 @@ import DiamondButton from '../components/DiamondButton'
 */
 export default function NotFound() {
   const { t } = useTranslation()
+  usePageTitle(t('pageTitles.notFound'))
   const navigate = useNavigate()
 
   return (

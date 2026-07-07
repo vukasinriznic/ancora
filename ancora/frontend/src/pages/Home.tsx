@@ -1,8 +1,10 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import Navbar from '../components/Navbar'
 import Hero from '../components/Hero'
 import CursorTrail from '../components/CursorTrail'
 import CursorGlow from '../components/CursorGlow'
+import { usePageTitle } from '../hooks/usePageTitle'
 
 // Sekcije ispod prevoja — lazy-loaded, parse-uju se tek kad browser stigni do njih
 const HowItWorks = lazy(() => import('../components/HowItWorks'))
@@ -12,6 +14,9 @@ const CtaSection = lazy(() => import('../components/CtaSection'))
 const Footer     = lazy(() => import('../components/Footer'))
 
 export default function Home() {
+  const { t } = useTranslation()
+  usePageTitle(t('pageTitles.home'))
+
   const footerWrapRef = useRef<HTMLDivElement>(null)
   const [footerH, setFooterH] = useState(0)
 

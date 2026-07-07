@@ -6,3 +6,5 @@ pydantic[email]
 pydantic-settings
 bcrypt
 pyjwt
+google-genai
+truststore

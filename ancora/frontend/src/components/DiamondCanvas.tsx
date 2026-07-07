@@ -1,4 +1,5 @@
 import { useEffect, useRef, forwardRef, useImperativeHandle } from 'react'
+import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion'
 
 interface Diamond {
   x: number
@@ -167,6 +168,7 @@ const DiamondCanvas = forwardRef<DiamondCanvasHandle, DiamondCanvasProps>(({ var
   const diamondsRef  = useRef<Diamond[]>([])
   const rafRef       = useRef(0)
   const startTimeRef = useRef(Date.now())
+  const reduced      = usePrefersReducedMotion()
 
   useImperativeHandle(ref, () => ({
     /*
@@ -225,9 +227,24 @@ const DiamondCanvas = forwardRef<DiamondCanvasHandle, DiamondCanvasProps>(({ var
         ? Math.max(small ? 4 : 3, Math.round(area / 200))
         : (small ? 4 : 3)
       diamondsRef.current = createDiamonds(canvas.width, area, cols, rows)
+      if (reduced) drawStaticFrame()
     }
+
+    // Reduced-motion: nacrtaj jedan miran kadar (oblici na origin poziciji, bez
+    // intro leta, drifta i shimmer pulsa) i preskoci celu animacionu petlju.
+    const drawStaticFrame = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      for (const d of diamondsRef.current) {
+        drawShape(ctx, d.originX, d.originY, d.sizeX, d.sizeY, d.rotation, d.opacity, 0, d.shimmerPhase, d.shimmerSpeed, variant)
+      }
+    }
+
     resize()
     window.addEventListener('resize', resize)
+
+    if (reduced) {
+      return () => window.removeEventListener('resize', resize)
+    }
 
     const onMouseMove = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect()
@@ -330,7 +347,7 @@ const DiamondCanvas = forwardRef<DiamondCanvasHandle, DiamondCanvasProps>(({ var
       io.disconnect()
       cancelAnimationFrame(rafRef.current)
     }
-  }, [variant, fill])
+  }, [variant, fill, reduced])
 
   return (
     <canvas
