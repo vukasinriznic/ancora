@@ -23,6 +23,10 @@ class Settings(BaseSettings):
     SMTP_PASSWORD: str = ""
     EMAIL_FROM: str = "Ancora <no-reply@ancora.app>"
 
+    # Brevo (transakcioni email preko HTTP API-ja). Render blokira izlazni SMTP,
+    # pa se u produkciji mejl šalje preko Brevo-a. Ako prazno → padne na SMTP/konzolu.
+    BREVO_API_KEY: str = ""
+
     # Google Gemini (besplatan tier). Ako prazno → mock AI odgovori (bez API poziva).
     GOOGLE_API_KEY: str = ""
     GOOGLE_MODEL: str = "gemini-2.5-flash"

@@ -1,29 +1,66 @@
 import smtplib
 from email.message import EmailMessage
+from email.utils import parseaddr
+
+import httpx
 
 from ..config import settings
 
+BREVO_API_URL = "https://api.brevo.com/v3/smtp/email"
+
 
 def _send(to_email: str, subject: str, text: str, html: str, dev_label: str, link: str) -> None:
-    """Zajednički SMTP sender. Ako SMTP nije podešen → ispiši link u konzolu (dev fallback)."""
-    if not settings.SMTP_HOST or not settings.SMTP_USER or not settings.SMTP_PASSWORD:
-        print("\n" + "=" * 70)
-        print(f"  [DEV] {dev_label} za {to_email}:")
-        print(f"  {link}")
-        print("=" * 70 + "\n", flush=True)
+    """
+    Šalje email. Redosled:
+      1) Brevo HTTP API (produkcija — Render blokira izlazni SMTP)
+      2) SMTP (lokalni dev, ako je podešen)
+      3) Ispis linka u konzolu (dev fallback bez ikakve konfiguracije)
+    Greške se loguju (flush=True) i ne ruše pozadinski task.
+    """
+    # 1) Brevo preko HTTPS (radi svuda, uključujući Render)
+    if settings.BREVO_API_KEY:
+        name, addr = parseaddr(settings.EMAIL_FROM)
+        try:
+            resp = httpx.post(
+                BREVO_API_URL,
+                headers={"api-key": settings.BREVO_API_KEY, "content-type": "application/json"},
+                json={
+                    "sender": {"name": name or "Ancora", "email": addr},
+                    "to": [{"email": to_email}],
+                    "subject": subject,
+                    "textContent": text,
+                    "htmlContent": html,
+                },
+                timeout=15,
+            )
+            resp.raise_for_status()
+        except Exception as e:
+            detail = getattr(getattr(e, "response", None), "text", "")
+            print(f"[email] Brevo send failed for {to_email}: {e} {detail}", flush=True)
         return
 
-    msg = EmailMessage()
-    msg["Subject"] = subject
-    msg["From"] = settings.EMAIL_FROM
-    msg["To"] = to_email
-    msg.set_content(text)
-    msg.add_alternative(html, subtype="html")
+    # 2) SMTP (lokalni dev)
+    if settings.SMTP_HOST and settings.SMTP_USER and settings.SMTP_PASSWORD:
+        msg = EmailMessage()
+        msg["Subject"] = subject
+        msg["From"] = settings.EMAIL_FROM
+        msg["To"] = to_email
+        msg.set_content(text)
+        msg.add_alternative(html, subtype="html")
+        try:
+            with smtplib.SMTP(settings.SMTP_HOST, settings.SMTP_PORT, timeout=15) as server:
+                server.starttls()
+                server.login(settings.SMTP_USER, settings.SMTP_PASSWORD)
+                server.send_message(msg)
+        except Exception as e:
+            print(f"[email] SMTP send failed for {to_email}: {e}", flush=True)
+        return
 
-    with smtplib.SMTP(settings.SMTP_HOST, settings.SMTP_PORT) as server:
-        server.starttls()
-        server.login(settings.SMTP_USER, settings.SMTP_PASSWORD)
-        server.send_message(msg)
+    # 3) Nema konfiguracije → ispiši link u konzolu
+    print("\n" + "=" * 70)
+    print(f"  [DEV] {dev_label} za {to_email}:")
+    print(f"  {link}")
+    print("=" * 70 + "\n", flush=True)
 
 
 def _button_email(heading: str, body: str, link: str, button_label: str, footer: str) -> str:

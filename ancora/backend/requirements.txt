@@ -7,4 +7,5 @@ pydantic-settings
 bcrypt
 pyjwt
 google-genai
+httpx
 truststore
