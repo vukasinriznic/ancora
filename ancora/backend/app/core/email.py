@@ -79,45 +79,67 @@ def _button_email(heading: str, body: str, link: str, button_label: str, footer:
     """
 
 
-def send_verification_email(to_email: str, first_name: str, token: str) -> None:
+def _is_sr(language: str) -> bool:
+    return (language or "").startswith("sr")
+
+
+def send_verification_email(to_email: str, first_name: str, token: str, language: str = "en") -> None:
     link = f"{settings.FRONTEND_URL}/verify?token={token}"
-    _send(
-        to_email,
-        subject="Potvrdi svoj nalog na Ancora",
-        text=(
+    if _is_sr(language):
+        subject = "Potvrdi svoj nalog na Ancora"
+        text = (
             f"Zdravo {first_name},\n\n"
             f"Potvrdi svoj email klikom na link (ističe za 24h):\n{link}\n\n"
             f"Ako se nisi registrovao, slobodno ignoriši ovu poruku.\n\n— Ancora"
-        ),
-        html=_button_email(
+        )
+        html = _button_email(
             f"Dobrodošao u Ancora, {first_name}",
             "Potvrdi svoj email da aktiviraš nalog. Link ističe za 24 sata.",
-            link,
-            "Potvrdi email",
+            link, "Potvrdi email",
             "Ako se nisi registrovao, ignoriši ovu poruku.",
-        ),
-        dev_label="Verifikacioni link",
-        link=link,
-    )
+        )
+    else:
+        subject = "Confirm your Ancora account"
+        text = (
+            f"Hi {first_name},\n\n"
+            f"Confirm your email by clicking the link (expires in 24h):\n{link}\n\n"
+            f"If you didn't sign up, feel free to ignore this message.\n\n— Ancora"
+        )
+        html = _button_email(
+            f"Welcome to Ancora, {first_name}",
+            "Confirm your email to activate your account. This link expires in 24 hours.",
+            link, "Confirm email",
+            "If you didn't sign up, ignore this message.",
+        )
+    _send(to_email, subject, text, html, dev_label="Verification link", link=link)
 
 
-def send_reset_email(to_email: str, first_name: str, token: str) -> None:
+def send_reset_email(to_email: str, first_name: str, token: str, language: str = "en") -> None:
     link = f"{settings.FRONTEND_URL}/reset-password?token={token}"
-    _send(
-        to_email,
-        subject="Reset lozinke — Ancora",
-        text=(
+    if _is_sr(language):
+        subject = "Reset lozinke — Ancora"
+        text = (
             f"Zdravo {first_name},\n\n"
             f"Zatražen je reset lozinke. Klikni na link da postaviš novu (ističe za 1h):\n{link}\n\n"
             f"Ako to nisi ti, slobodno ignoriši ovu poruku — lozinka ostaje nepromenjena.\n\n— Ancora"
-        ),
-        html=_button_email(
+        )
+        html = _button_email(
             "Reset lozinke",
             f"Zdravo {first_name}, klikni ispod da postaviš novu lozinku. Link ističe za 1 sat.",
-            link,
-            "Postavi novu lozinku",
+            link, "Postavi novu lozinku",
             "Ako nisi ti zatražio reset, ignoriši ovu poruku.",
-        ),
-        dev_label="Reset link",
-        link=link,
-    )
+        )
+    else:
+        subject = "Reset your password — Ancora"
+        text = (
+            f"Hi {first_name},\n\n"
+            f"A password reset was requested. Click the link to set a new one (expires in 1h):\n{link}\n\n"
+            f"If this wasn't you, feel free to ignore this message — your password stays unchanged.\n\n— Ancora"
+        )
+        html = _button_email(
+            "Reset your password",
+            f"Hi {first_name}, click below to set a new password. This link expires in 1 hour.",
+            link, "Set a new password",
+            "If you didn't request a reset, ignore this message.",
+        )
+    _send(to_email, subject, text, html, dev_label="Reset link", link=link)

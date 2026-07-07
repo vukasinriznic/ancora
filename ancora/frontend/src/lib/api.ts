@@ -58,6 +58,11 @@ export interface ChatDetail {
   messages: ChatMessage[]
 }
 
+/** Aktivan UI jezik za email šablone (isti izvor kao i18n init: localStorage['lang']). */
+function uiLang(): 'en' | 'sr' {
+  try { return localStorage.getItem('lang') === 'sr' ? 'sr' : 'en' } catch { return 'en' }
+}
+
 export function getToken(): string | null {
   try { return localStorage.getItem(TOKEN_KEY) } catch { return null }
 }
@@ -113,15 +118,15 @@ async function request<T>(path: string, options: RequestInit = {}, auth = false)
 
 export const authApi = {
   register: (payload: RegisterPayload) =>
-    request<MessageResponse>('/auth/register', { method: 'POST', body: JSON.stringify(payload) }),
+    request<MessageResponse>('/auth/register', { method: 'POST', body: JSON.stringify({ ...payload, language: uiLang() }) }),
   login: (email: string, password: string) =>
     request<AuthResponse>('/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) }),
   verify: (token: string) =>
     request<AuthResponse>('/auth/verify', { method: 'POST', body: JSON.stringify({ token }) }),
   resendVerification: (email: string) =>
-    request<MessageResponse>('/auth/resend-verification', { method: 'POST', body: JSON.stringify({ email }) }),
+    request<MessageResponse>('/auth/resend-verification', { method: 'POST', body: JSON.stringify({ email, language: uiLang() }) }),
   forgotPassword: (email: string) =>
-    request<MessageResponse>('/auth/forgot-password', { method: 'POST', body: JSON.stringify({ email }) }),
+    request<MessageResponse>('/auth/forgot-password', { method: 'POST', body: JSON.stringify({ email, language: uiLang() }) }),
   resetPassword: (token: string, password: string) =>
     request<MessageResponse>('/auth/reset-password', { method: 'POST', body: JSON.stringify({ token, password }) }),
   me: () => request<User>('/auth/me', {}, true),

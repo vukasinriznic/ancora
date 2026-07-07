@@ -49,7 +49,7 @@ def register(data: RegisterRequest, background: BackgroundTasks, db: Session = D
 
     # Pošalji verifikacioni email u pozadini (ne blokira odgovor)
     token = create_verification_token(user.id)
-    background.add_task(send_verification_email, user.email, user.first_name, token)
+    background.add_task(send_verification_email, user.email, user.first_name, token, data.language)
 
     return MessageResponse(message="verification_sent", email=str(user.email))
 
@@ -80,7 +80,7 @@ def resend_verification(data: ResendRequest, background: BackgroundTasks, db: Se
     # Šaljemo samo ako postoji i nije potvrđen; odgovor je uvek isti (ne otkrivamo da li email postoji)
     if user and not user.is_verified:
         token = create_verification_token(user.id)
-        background.add_task(send_verification_email, user.email, user.first_name, token)
+        background.add_task(send_verification_email, user.email, user.first_name, token, data.language)
     return MessageResponse(message="verification_sent", email=str(data.email))
 
 
@@ -102,7 +102,7 @@ def forgot_password(data: ForgotPasswordRequest, background: BackgroundTasks, db
     # Šaljemo samo ako nalog postoji; odgovor je uvek isti (ne otkrivamo da li email postoji)
     if user:
         token = create_reset_token(user.id)
-        background.add_task(send_reset_email, user.email, user.first_name, token)
+        background.add_task(send_reset_email, user.email, user.first_name, token, data.language)
     return MessageResponse(message="reset_sent", email=str(data.email))
 
 

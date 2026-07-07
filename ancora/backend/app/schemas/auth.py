@@ -16,6 +16,7 @@ class RegisterRequest(CamelModel):
     email: EmailStr
     password: str = Field(min_length=8)
     description: str = Field(min_length=DESCRIPTION_MIN)
+    language: str = "en"   # jezik za email (en/sr)
 
 
 class LoginRequest(CamelModel):
@@ -29,10 +30,12 @@ class VerifyRequest(CamelModel):
 
 class ResendRequest(CamelModel):
     email: EmailStr
+    language: str = "en"
 
 
 class ForgotPasswordRequest(CamelModel):
     email: EmailStr
+    language: str = "en"
 
 
 class ResetPasswordRequest(CamelModel):
