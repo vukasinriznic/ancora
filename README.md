@@ -21,7 +21,7 @@ Ancora is the *"wise friend everyone wants but rarely has"* — an AI advisor th
 ## ✨ Features
 
 ### 🔐 Authentication
-- Secure registration with **email verification** over SMTP
+- Secure registration with **email verification** over transactional email
 - JWT-based authentication with bcrypt password hashing
 - **Forgot / reset password** via time-limited email links (1-hour token)
 - Protected routes — each user sees only their own conversations
@@ -55,7 +55,7 @@ Ancora is the *"wise friend everyone wants but rarely has"* — an AI advisor th
 | Database | PostgreSQL + SQLAlchemy |
 | AI | Google Gemini (`gemini-2.5-flash`) |
 | Auth | JWT + bcrypt |
-| Email | SMTP (Gmail) |
+| Email | Brevo (transactional API) |
 | i18n | i18next / react-i18next |
 
 ---
@@ -99,17 +99,16 @@ JWT_SECRET=your_random_secret_here
 FRONTEND_URL=http://localhost:5173
 CORS_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
 
-# SMTP (optional — leave blank to print email links to the console in dev)
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USER=your_email@gmail.com
-SMTP_PASSWORD=your_gmail_app_password
-EMAIL_FROM=Ancora <no-reply@ancora.app>
+# Email — Brevo transactional API (verify a single sender, no domain needed).
+# Leave blank to fall back to local SMTP, or to print email links to the console in dev.
+BREVO_API_KEY=your_brevo_api_key
+EMAIL_FROM=Ancora <your_verified_sender@gmail.com>
 
 # Google Gemini (optional — leave blank for mock AI replies)
 GOOGLE_API_KEY=your_gemini_api_key
 GOOGLE_MODEL=gemini-2.5-flash
 ```
+> **Note:** the production backend runs on Render, which blocks outbound SMTP — email is sent via Brevo's HTTPS API. Raw SMTP still works as a local-dev fallback.
 
 Start the backend server:
 ```bash
@@ -154,7 +153,9 @@ ancora/
 
 ## 🔗 Live Site
 
-🚧 Coming soon — deployment in progress.
+👉 **[ancora-ai.vercel.app](https://ancora-ai.vercel.app)**
+
+> Hosted on free tiers (Vercel · Render · Supabase). The backend may take ~30s to wake on the first request if it has been idle.
 
 ---
 
