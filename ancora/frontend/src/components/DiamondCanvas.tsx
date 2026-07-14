@@ -1,5 +1,6 @@
 import { useEffect, useRef, forwardRef, useImperativeHandle } from 'react'
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion'
+import { useIsMobile } from '../hooks/useIsMobile'
 
 interface Diamond {
   x: number
@@ -168,7 +169,10 @@ const DiamondCanvas = forwardRef<DiamondCanvasHandle, DiamondCanvasProps>(({ var
   const diamondsRef  = useRef<Diamond[]>([])
   const rafRef       = useRef(0)
   const startTimeRef = useRef(Date.now())
-  const reduced      = usePrefersReducedMotion()
+  // Statični kadar (bez animacione petlje) kad korisnik traži reduced-motion ILI je na
+  // mobilnom — na slabijim telefonima rAF crtanje gradijent-rombova svaki frame secka i
+  // lomi scroll. Rombovi ostaju vidljivi, samo se ne animiraju.
+  const staticMode   = usePrefersReducedMotion() || useIsMobile()
 
   useImperativeHandle(ref, () => ({
     /*
@@ -227,11 +231,11 @@ const DiamondCanvas = forwardRef<DiamondCanvasHandle, DiamondCanvasProps>(({ var
         ? Math.max(small ? 4 : 3, Math.round(area / 200))
         : (small ? 4 : 3)
       diamondsRef.current = createDiamonds(canvas.width, area, cols, rows)
-      if (reduced) drawStaticFrame()
+      if (staticMode) drawStaticFrame()
     }
 
-    // Reduced-motion: nacrtaj jedan miran kadar (oblici na origin poziciji, bez
-    // intro leta, drifta i shimmer pulsa) i preskoci celu animacionu petlju.
+    // Statični kadar (reduced-motion ili mobilni): oblici na origin poziciji, bez intro
+    // leta, drifta i shimmer pulsa — preskačemo celu animacionu petlju.
     const drawStaticFrame = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       for (const d of diamondsRef.current) {
@@ -242,7 +246,7 @@ const DiamondCanvas = forwardRef<DiamondCanvasHandle, DiamondCanvasProps>(({ var
     resize()
     window.addEventListener('resize', resize)
 
-    if (reduced) {
+    if (staticMode) {
       return () => window.removeEventListener('resize', resize)
     }
 
@@ -347,7 +351,7 @@ const DiamondCanvas = forwardRef<DiamondCanvasHandle, DiamondCanvasProps>(({ var
       io.disconnect()
       cancelAnimationFrame(rafRef.current)
     }
-  }, [variant, fill, reduced])
+  }, [variant, fill, staticMode])
 
   return (
     <canvas

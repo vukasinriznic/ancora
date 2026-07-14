@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion'
+import { useIsMobile } from '../hooks/useIsMobile'
 
 interface Particle {
   x: number
@@ -67,10 +68,11 @@ function drawMiniCrystal(
 
 export default function CursorTrail({ variant = 'green' }: { variant?: TrailVariant }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const reduced = usePrefersReducedMotion()
+  // Bez kursora (mobilni) ili uz reduced-motion nema svrhe — a rAF petlja bespotrebno secka.
+  const disabled = usePrefersReducedMotion() || useIsMobile()
 
   useEffect(() => {
-    if (reduced) return
+    if (disabled) return
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
@@ -143,9 +145,9 @@ export default function CursorTrail({ variant = 'green' }: { variant?: TrailVari
       window.removeEventListener('mousemove', onMouseMove)
       cancelAnimationFrame(rafId)
     }
-  }, [variant, reduced])
+  }, [variant, disabled])
 
-  if (reduced) return null
+  if (disabled) return null
 
   return (
     <canvas

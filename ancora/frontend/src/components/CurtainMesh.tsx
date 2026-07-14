@@ -17,7 +17,12 @@ export default function CurtainMesh() {
     if (!ctx) return
     const g: CanvasRenderingContext2D = ctx
 
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    // "reduce" = nacrtaj samo jedan miran kadar bez fizike/rAF petlje.
+    // Uključujemo i mobilni (≤767px): cloth-simulacija cele mreže svaki frame secka
+    // na telefonima i lomi scroll. Na desktopu ostaje puna interakcija.
+    const reduce =
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      window.matchMedia('(max-width: 767px)').matches
 
     const dpr     = Math.min(window.devicePixelRatio || 1, 2)
     const S       = 38      // razmak mreže

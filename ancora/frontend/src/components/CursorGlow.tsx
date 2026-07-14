@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion'
+import { useIsMobile } from '../hooks/useIsMobile'
 
 /*
   Meka zelena aureola koja prati kursor kroz cijeli sajt.
@@ -9,10 +10,11 @@ import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion'
 */
 export default function CursorGlow() {
   const ref = useRef<HTMLDivElement>(null)
-  const reduced = usePrefersReducedMotion()
+  // Bez kursora (mobilni) ili uz reduced-motion nema svrhe — a rAF lerp bespotrebno troši frame-ove.
+  const disabled = usePrefersReducedMotion() || useIsMobile()
 
   useEffect(() => {
-    if (reduced) return
+    if (disabled) return
     const el = ref.current
     if (!el) return
 
@@ -38,9 +40,9 @@ export default function CursorGlow() {
       window.removeEventListener('mousemove', onMove)
       cancelAnimationFrame(raf)
     }
-  }, [reduced])
+  }, [disabled])
 
-  if (reduced) return null
+  if (disabled) return null
 
   return (
     <div
