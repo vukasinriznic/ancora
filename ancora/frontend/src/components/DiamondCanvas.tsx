@@ -1,6 +1,5 @@
 import { useEffect, useRef, forwardRef, useImperativeHandle } from 'react'
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion'
-import { useIsMobile } from '../hooks/useIsMobile'
 
 interface Diamond {
   x: number
@@ -169,10 +168,7 @@ const DiamondCanvas = forwardRef<DiamondCanvasHandle, DiamondCanvasProps>(({ var
   const diamondsRef  = useRef<Diamond[]>([])
   const rafRef       = useRef(0)
   const startTimeRef = useRef(Date.now())
-  // Statični kadar (bez animacione petlje) kad korisnik traži reduced-motion ILI je na
-  // mobilnom — na slabijim telefonima rAF crtanje gradijent-rombova svaki frame secka i
-  // lomi scroll. Rombovi ostaju vidljivi, samo se ne animiraju.
-  const staticMode   = usePrefersReducedMotion() || useIsMobile()
+  const reduced      = usePrefersReducedMotion()
 
   useImperativeHandle(ref, () => ({
     /*
@@ -216,9 +212,21 @@ const DiamondCanvas = forwardRef<DiamondCanvasHandle, DiamondCanvasProps>(({ var
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    // Pamtimo poslednju širinu: rombove regenerišemo SAMO kad se promeni širina.
+    // Na mobilnom, skrolovanje sakriva/pokazuje URL-traku → menja se visina viewporta i
+    // okida se `resize`. Da NE bismo tada nasumično premeštali rombove (izgleda kao da
+    // "teleportuju"), na promenu samo-visine zadržavamo postojeće pozicije.
+    let lastW = -1
+
     const resize = () => {
       canvas.width  = canvas.offsetWidth
       canvas.height = canvas.offsetHeight
+      if (canvas.width === lastW) {
+        // Samo visina se promenila (mobilni scroll) — zadrži rombove gde jesu.
+        if (reduced) drawStaticFrame()
+        return
+      }
+      lastW = canvas.width
       // Kristali se pojavljuju samo u gornjoj 2/3 (hero area).
       // Donja 1/3 je prostor u koji oblici mogu da ulete tokom eksplozije.
       // Manje rombova na mobilnom (uže = manje kolona).
@@ -231,11 +239,11 @@ const DiamondCanvas = forwardRef<DiamondCanvasHandle, DiamondCanvasProps>(({ var
         ? Math.max(small ? 4 : 3, Math.round(area / 200))
         : (small ? 4 : 3)
       diamondsRef.current = createDiamonds(canvas.width, area, cols, rows)
-      if (staticMode) drawStaticFrame()
+      if (reduced) drawStaticFrame()
     }
 
-    // Statični kadar (reduced-motion ili mobilni): oblici na origin poziciji, bez intro
-    // leta, drifta i shimmer pulsa — preskačemo celu animacionu petlju.
+    // Reduced-motion: nacrtaj jedan miran kadar (oblici na origin poziciji, bez
+    // intro leta, drifta i shimmer pulsa) i preskoci celu animacionu petlju.
     const drawStaticFrame = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       for (const d of diamondsRef.current) {
@@ -246,7 +254,7 @@ const DiamondCanvas = forwardRef<DiamondCanvasHandle, DiamondCanvasProps>(({ var
     resize()
     window.addEventListener('resize', resize)
 
-    if (staticMode) {
+    if (reduced) {
       return () => window.removeEventListener('resize', resize)
     }
 
@@ -351,7 +359,7 @@ const DiamondCanvas = forwardRef<DiamondCanvasHandle, DiamondCanvasProps>(({ var
       io.disconnect()
       cancelAnimationFrame(rafRef.current)
     }
-  }, [variant, fill, staticMode])
+  }, [variant, fill, reduced])
 
   return (
     <canvas
