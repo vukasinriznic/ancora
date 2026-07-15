@@ -1,13 +1,19 @@
 name: Keep backend awake
 
 # Render free tier spava posle 15 min neaktivnosti (prvi zahtev tada čeka ~30–50s).
-# Ovaj job gađa /health na svakih 10 min da backend ostane budan 24/7.
+# Ovaj job gađa /health da backend ostane budan dok traje prozor ispod.
+#
+# Prozor postoji zbog novca: ancora, tahoservice i mealmuse-server dele jedan
+# Render pool od 750h mesečno, a jedan servis budan 24/7 sam potroši ~744h.
+# 08-15 UTC = 10:00-17:59 kod nas ≈ 243h/mesec, što uz tahoservice (~456h)
+# staje u limit. Ne vraćaj na 24/7 bez ponovnog računa.
+#
 # Napomena: GitHub gasi zakazane workflow-e posle 60 dana neaktivnosti repo-a — samo
 # ih ponovo uključi u Actions tabu ako se to desi.
 
 on:
   schedule:
-    - cron: "*/10 * * * *"
+    - cron: "*/5 8-15 * * *"
   workflow_dispatch: {}
 
 jobs:
