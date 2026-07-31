@@ -5,11 +5,13 @@ import truststore
 # antivirus/korporativni proxy presreće HTTPS. Mora biti pre bilo kog HTTPS klijenta.
 truststore.inject_into_ssl()
 
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import text
+from sqlalchemy.orm import Session
 
 from .config import settings
-from .database import Base, engine
+from .database import Base, engine, get_db
 from .models import chat as _chat  # noqa: F401 — registruje model za create_all
 from .models import user as _user  # noqa: F401 — registruje model za create_all
 from .routers import auth, chats
@@ -35,4 +37,13 @@ app.include_router(chats.router)
 # je placena opcija. Bez ovoga FastAPI vraca 405 i monitor prijavljuje lazan pad.
 @app.api_route("/health", methods=["GET", "HEAD"], tags=["health"])
 def health() -> dict[str, str]:
+    return {"status": "ok"}
+
+
+# Isti health, ali pravi lagan DB upit (SELECT 1). Keep-alive gađa OVAJ endpoint da bi
+# održao i Supabase free projekat aktivnim — on se pauzira posle 7 dana neaktivnosti BAZE,
+# a obični /health ne dira bazu. /health ostaje bez DB-a (Render liveness check ga koristi).
+@app.api_route("/health/db", methods=["GET", "HEAD"], tags=["health"])
+def health_db(db: Session = Depends(get_db)) -> dict[str, str]:
+    db.execute(text("SELECT 1"))
     return {"status": "ok"}

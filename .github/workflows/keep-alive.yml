@@ -20,5 +20,5 @@ jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping Render health endpoint
-        run: curl -sSf https://ancora-7wgt.onrender.com/health
+      - name: Ping Render health endpoint (DB-touching → keeps Supabase from pausing too)
+        run: curl -sSf https://ancora-7wgt.onrender.com/health/db
