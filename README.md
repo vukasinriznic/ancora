@@ -1,4 +1,4 @@
-# ⚓ Ancora — Wise Relationship Advice, Whenever You Need It
+# ⚓ Ancora - Wise Relationship Advice, Whenever You Need It
 
 A full-stack AI web application that offers thoughtful, dignified relationship advice — describe your situation and think it through with honesty and compassion. Built with **React**, **FastAPI**, **PostgreSQL** and **Google Gemini**.
 
