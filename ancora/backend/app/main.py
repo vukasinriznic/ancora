@@ -16,8 +16,14 @@ from .models import chat as _chat  # noqa: F401 — registruje model za create_a
 from .models import user as _user  # noqa: F401 — registruje model za create_all
 from .routers import auth, chats
 
-# create_all: napravi tabele ako ne postoje (bez Alembic-a za sada)
-Base.metadata.create_all(bind=engine)
+# create_all: napravi tabele ako ne postoje (bez Alembic-a za sada).
+# NE ruši app ako je baza trenutno nedostupna (npr. Supabase free se pauzira posle 7 dana
+# neaktivnosti). Tada se app i dalje diže i servira /health; kad se baza vrati, pool_pre_ping
+# se sam reconnect-uje i DB rute prorade. Tabele se naprave na prvom startu dok je baza gore.
+try:
+    Base.metadata.create_all(bind=engine)
+except Exception as e:
+    print(f"[startup] create_all preskočen — baza nedostupna: {e}", flush=True)
 
 app = FastAPI(title="Ancora API")
 
